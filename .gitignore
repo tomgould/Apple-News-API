@@ -7,7 +7,6 @@
 *.log
 .idea/
 .vscode/
-/docs/api/
+/docs/html/
 /.phpdoc/
 /tools/phpDocumentor.phar
-

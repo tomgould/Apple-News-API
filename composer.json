@@ -38,7 +38,8 @@
         "guzzlehttp/guzzle": "^7.0",
         "guzzlehttp/psr7": "^2.0",
         "phpstan/phpstan": "^1.10",
-        "phpunit/phpunit": "^10.0|^11.0"
+        "phpunit/phpunit": "^10.0|^11.0",
+        "saggre/phpdocumentor-markdown": "^1.0"
     },
     "suggest": {
         "guzzlehttp/guzzle": "PSR-18 HTTP client implementation",
@@ -60,7 +61,9 @@
         "analyse": "phpstan analyse src --level=8",
         "cs-fix": "php-cs-fixer fix src",
         "docs:install": "curl -sSL https://phpdoc.org/phpDocumentor.phar -o tools/phpDocumentor.phar && chmod +x tools/phpDocumentor.phar",
-        "docs": "php tools/phpDocumentor.phar run -d src -t docs/api --title='Apple News API PHP Client'"
+        "docs": "php tools/phpDocumentor.phar run -d src -t docs/api --title='Apple News API PHP Client'",
+        "docsmd": "php tools/phpDocumentor.phar run -d src -t docs/api --template='vendor/saggre/phpdocumentor-markdown/themes/markdown' --title='Apple News API PHP Client'"
+
     },
     "config": {
         "sort-packages": true
