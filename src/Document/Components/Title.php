@@ -1,0 +1,18 @@
+<?php
+
+declare(strict_types=1);
+
+namespace TomGould\AppleNews\Document\Components;
+
+/**
+ * Title component.
+ *
+ * @see https://developer.apple.com/documentation/apple_news/title
+ */
+final class Title extends TextComponent
+{
+    public function getRole(): string
+    {
+        return 'title';
+    }
+}

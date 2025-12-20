@@ -1,0 +1,57 @@
+{
+    "name": "tomgould/apple-news-api",
+    "description": "Modern PHP client for the Apple News Publisher API with full Apple News Format document support",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "apple",
+        "news",
+        "api",
+        "publisher",
+        "apple-news",
+        "apple-news-format"
+    ],
+    "authors": [
+        {
+            "name": "TomGould",
+            "email": "dev@tomgould.com"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "psr/http-client": "^1.0",
+        "psr/http-factory": "^1.0",
+        "psr/http-message": "^1.1|^2.0"
+    },
+    "require-dev": {
+        "guzzlehttp/guzzle": "^7.0",
+        "guzzlehttp/psr7": "^2.0",
+        "phpunit/phpunit": "^10.0|^11.0",
+        "phpstan/phpstan": "^1.10",
+        "friendsofphp/php-cs-fixer": "^3.0"
+    },
+    "suggest": {
+        "guzzlehttp/guzzle": "PSR-18 HTTP client implementation",
+        "symfony/http-client": "Alternative PSR-18 HTTP client"
+    },
+    "autoload": {
+        "psr-4": {
+            "TomGould\\AppleNews\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "TomGould\\AppleNews\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "analyse": "phpstan analyse src --level=8",
+        "cs-fix": "php-cs-fixer fix src"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
