@@ -7,7 +7,7 @@ namespace TomGould\AppleNews\Document\Components;
 /**
  * A heading component (supports levels 1 through 6).
  *
- * @see https://developer.apple.com/documentation/apple_news/heading
+ * @see https://developer.apple.com/documentation/applenews/heading
  */
 final class Heading extends TextComponent
 {
@@ -31,4 +31,3 @@ final class Heading extends TextComponent
         return 'heading' . min(max($this->level, 1), 6);
     }
 }
-

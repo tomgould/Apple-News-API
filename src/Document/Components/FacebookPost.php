@@ -7,7 +7,7 @@ namespace TomGould\AppleNews\Document\Components;
 /**
  * Component for embedding Facebook posts.
  *
- * @see https://developer.apple.com/documentation/apple_news/facebookpost
+ * @see https://developer.apple.com/documentation/applenews/facebookpost
  */
 final class FacebookPost extends Component
 {
@@ -34,4 +34,3 @@ final class FacebookPost extends Component
         return $data;
     }
 }
-

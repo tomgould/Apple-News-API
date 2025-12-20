@@ -12,7 +12,7 @@ use JsonSerializable;
  * Every Apple News article requires a layout object to determine how components
  * are positioned relative to the grid columns.
  *
- * @see https://developer.apple.com/documentation/apple_news/layout
+ * @see https://developer.apple.com/documentation/applenews/layout
  */
 final class Layout implements JsonSerializable
 {
@@ -75,4 +75,3 @@ final class Layout implements JsonSerializable
         return $data;
     }
 }
-

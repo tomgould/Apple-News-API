@@ -16,7 +16,7 @@ use InvalidArgumentException;
  * signed using the API secret key. The signature is computed from a canonical
  * string including the method, URL, date, and optionally the body for POSTs.
  *
- * @see https://developer.apple.com/documentation/apple_news/apple_news_api/authenticating_with_the_apple_news_api
+ * @see https://developer.apple.com/documentation/applenews/apple_news_api/authenticating_with_the_apple_news_api
  */
 final class Authenticator
 {
@@ -136,4 +136,3 @@ final class Authenticator
         return $this->keyId;
     }
 }
-

@@ -11,7 +11,7 @@ use JsonSerializable;
  *
  * This class controls typography including fonts, colors, spacing, and alignment.
  *
- * @see https://developer.apple.com/documentation/apple_news/componenttextstyle
+ * @see https://developer.apple.com/documentation/applenews/componenttextstyle
  */
 final class ComponentTextStyle implements JsonSerializable
 {
@@ -330,4 +330,3 @@ final class ComponentTextStyle implements JsonSerializable
         return $data;
     }
 }
-

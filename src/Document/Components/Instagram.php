@@ -7,7 +7,7 @@ namespace TomGould\AppleNews\Document\Components;
 /**
  * Component for embedding Instagram posts.
  *
- * @see https://developer.apple.com/documentation/apple_news/instagram
+ * @see https://developer.apple.com/documentation/applenews/instagram
  */
 final class Instagram extends Component
 {
@@ -34,4 +34,3 @@ final class Instagram extends Component
         return $data;
     }
 }
-

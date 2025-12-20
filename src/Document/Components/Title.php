@@ -7,7 +7,7 @@ namespace TomGould\AppleNews\Document\Components;
 /**
  * The main title component for an article.
  *
- * @see https://developer.apple.com/documentation/apple_news/title
+ * @see https://developer.apple.com/documentation/applenews/title
  */
 final class Title extends TextComponent
 {
@@ -16,4 +16,3 @@ final class Title extends TextComponent
         return 'title';
     }
 }
-

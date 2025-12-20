@@ -9,14 +9,24 @@
         "api",
         "publisher",
         "apple-news",
-        "apple-news-format"
+        "apple-news-format",
+        "anf",
+        "psr-18",
+        "psr-7"
     ],
     "authors": [
         {
             "name": "TomGould",
-            "email": "dev@tomgould.com"
+            "email": "tom@dealmobile.co.uk",
+            "homepage": "https://dealmobile.co.uk/",
+            "role": "Developer"
         }
     ],
+    "homepage": "https://github.com/tomgould/apple-news-api",
+    "support": {
+        "issues": "https://github.com/tomgould/apple-news-api/issues",
+        "source": "https://github.com/tomgould/apple-news-api"
+    },
     "require": {
         "php": "^8.1",
         "psr/http-client": "^1.0",
@@ -46,6 +56,7 @@
     },
     "scripts": {
         "test": "phpunit",
+        "test:coverage": "XDEBUG_MODE=coverage phpunit --coverage-html coverage",
         "analyse": "phpstan analyse src --level=8",
         "cs-fix": "php-cs-fixer fix src",
         "docs:install": "curl -sSL https://phpdoc.org/phpDocumentor.phar -o tools/phpDocumentor.phar && chmod +x tools/phpDocumentor.phar",
@@ -57,4 +68,3 @@
     "minimum-stability": "stable",
     "prefer-stable": true
 }
-

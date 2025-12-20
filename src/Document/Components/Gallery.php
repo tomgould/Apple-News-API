@@ -7,7 +7,7 @@ namespace TomGould\AppleNews\Document\Components;
 /**
  * Component for displaying a collection of images as a gallery.
  *
- * @see https://developer.apple.com/documentation/apple_news/gallery
+ * @see https://developer.apple.com/documentation/applenews/gallery
  */
 final class Gallery extends Component
 {
@@ -53,4 +53,3 @@ final class Gallery extends Component
         return $data;
     }
 }
-

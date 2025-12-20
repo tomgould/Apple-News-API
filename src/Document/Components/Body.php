@@ -7,7 +7,7 @@ namespace TomGould\AppleNews\Document\Components;
 /**
  * The standard text component for body paragraphs.
  *
- * @see https://developer.apple.com/documentation/apple_news/body
+ * @see https://developer.apple.com/documentation/applenews/body
  */
 final class Body extends TextComponent
 {
@@ -16,4 +16,3 @@ final class Body extends TextComponent
         return 'body';
     }
 }
-

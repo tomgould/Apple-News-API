@@ -7,7 +7,7 @@ namespace TomGould\AppleNews\Document\Components;
 /**
  * Embeds third-party video content (YouTube, Vimeo, etc.).
  *
- * @see https://developer.apple.com/documentation/apple_news/embedwebvideo
+ * @see https://developer.apple.com/documentation/applenews/embedwebvideo
  */
 final class EmbedWebVideo extends Component
 {
@@ -100,4 +100,3 @@ final class EmbedWebVideo extends Component
         return $data;
     }
 }
-

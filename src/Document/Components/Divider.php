@@ -7,7 +7,7 @@ namespace TomGould\AppleNews\Document\Components;
 /**
  * A visual separator line used between other components.
  *
- * @see https://developer.apple.com/documentation/apple_news/divider
+ * @see https://developer.apple.com/documentation/applenews/divider
  */
 final class Divider extends Component
 {
@@ -43,4 +43,3 @@ final class Divider extends Component
         return $data;
     }
 }
-

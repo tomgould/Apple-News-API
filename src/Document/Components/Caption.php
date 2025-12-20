@@ -7,7 +7,7 @@ namespace TomGould\AppleNews\Document\Components;
 /**
  * A standard text component for captions.
  *
- * @see https://developer.apple.com/documentation/apple_news/caption
+ * @see https://developer.apple.com/documentation/applenews/caption
  */
 final class Caption extends TextComponent
 {
@@ -16,4 +16,3 @@ final class Caption extends TextComponent
         return 'caption';
     }
 }
-

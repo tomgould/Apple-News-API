@@ -2,17 +2,26 @@
 
 A modern, PSR-compliant PHP library for the Apple News Publisher API with full Apple News Format (ANF) document support.
 
-[![PHP Version](https://img.shields.io/badge/php-%5E8.1-blue)](https://php.net)
-[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![Latest Version](https://img.shields.io/packagist/v/tomgould/apple-news-api.svg?style=flat-square)](https://packagist.org/packages/tomgould/apple-news-api)
+[![Total Downloads](https://img.shields.io/packagist/dt/tomgould/apple-news-api.svg?style=flat-square)](https://packagist.org/packages/tomgould/apple-news-api)
+[![CI](https://github.com/tomgould/apple-news-api/actions/workflows/ci.yml/badge.svg)](https://github.com/tomgould/apple-news-api/actions)
+[![PHP Version](https://img.shields.io/packagist/php-v/tomgould/apple-news-api.svg?style=flat-square)](https://php.net)
+[![License](https://img.shields.io/packagist/l/tomgould/apple-news-api.svg?style=flat-square)](LICENSE)
 
 ## Features
 
-- 🚀 **Modern PHP 8.1+** with strict types and named arguments.
-- 🔌 **PSR-18 HTTP Client** compatible (works with Guzzle, Symfony, etc.).
-- 📝 **Full Apple News Format** support with a fluent, object-oriented document builder.
-- 🔐 **HMAC-SHA256 Authentication** handled automatically.
-- 📦 **Zero Framework Dependencies** - standalone package.
-- ✅ **Tested** with PHPUnit.
+- 🚀 **Modern PHP 8.1+** with strict types and named arguments
+- 🔌 **PSR-18 HTTP Client** compatible (works with Guzzle, Symfony, etc.)
+- 📝 **Full Apple News Format** support with a fluent, object-oriented document builder
+- 🔐 **HMAC-SHA256 Authentication** handled automatically
+- 📦 **Zero Framework Dependencies** — use with any framework or standalone
+- ✅ **Thoroughly Tested** — 99%+ code coverage
+
+## Requirements
+
+- PHP 8.1 or higher
+- A PSR-18 HTTP client (e.g., Guzzle)
+- Apple News Publisher API credentials
 
 ## Installation
 
@@ -20,30 +29,67 @@ A modern, PSR-compliant PHP library for the Apple News Publisher API with full A
 composer require tomgould/apple-news-api
 ```
 
-You also need a PSR-18 HTTP client and PSR-17 factories. Guzzle is the standard choice:
+You also need a PSR-18 HTTP client and PSR-17 factories. Guzzle is recommended:
 
 ```bash
 composer require guzzlehttp/guzzle guzzlehttp/psr7
+```
+
+## Quick Start
+
+```php
+use TomGould\AppleNews\Client\AppleNewsClient;
+use TomGould\AppleNews\Document\Article;
+use TomGould\AppleNews\Document\Components\{Title, Body, Photo};
+use TomGould\AppleNews\Document\Metadata;
+use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\HttpFactory;
+
+// 1. Create the client
+$factory = new HttpFactory();
+$client = AppleNewsClient::create(
+    keyId: 'your-api-key-id',
+    keySecret: 'your-api-secret',
+    httpClient: new Client(),
+    requestFactory: $factory,
+    streamFactory: $factory
+);
+
+// 2. Build an article
+$article = Article::create(
+    identifier: 'my-article-123',
+    title: 'Breaking News Story',
+    language: 'en'
+);
+
+$article
+    ->addComponent(new Title('Breaking News Story'))
+    ->addComponent(Photo::fromUrl('https://example.com/hero.jpg'))
+    ->addComponent(new Body('This is the article content...'));
+
+$article->setMetadata(
+    (new Metadata())
+        ->addAuthor('Jane Doe')
+        ->setExcerpt('A short summary of the article')
+);
+
+// 3. Publish to Apple News
+$response = $client->createArticle('your-channel-id', $article);
+
+echo "Published! Article ID: " . $response['data']['id'];
 ```
 
 ---
 
 ## Full Implementation Guide
 
-This guide covers the end-to-end workflow for publishing content to Apple News using this library.
+### Getting Your API Credentials
 
-### 1. Prerequisites & Security
+1. Sign up for [Apple News Publisher](https://developer.apple.com/apple-news/)
+2. Create a channel for your publication
+3. Generate API credentials (Key ID and Secret)
 
-Before you begin, ensure you have your credentials from **Apple News Publisher**:
-- **Channel ID**: A UUID identifying your publication.
-- **API Key ID**: A UUID identifying your API key.
-- **API Key Secret**: A Base64-encoded string used for signing requests.
-
-The library handles the HMAC-SHA256 signing process automatically using the `Authenticator` class.
-
-### 2. Client Initialization
-
-The `AppleNewsClient` uses PSR interfaces, making it compatible with any modern HTTP library.
+### Client Initialization
 
 ```php
 use TomGould\AppleNews\Client\AppleNewsClient;
@@ -62,11 +108,10 @@ $client = AppleNewsClient::create(
 );
 ```
 
-### 3. Building an Article (ANF)
+### Building Articles
 
-Apple News Format (ANF) is a JSON-based document format. This library provides a fluent builder to construct these documents.
+#### Create the Article
 
-#### A. Create the Article Object
 ```php
 use TomGould\AppleNews\Document\Article;
 
@@ -74,13 +119,13 @@ $article = Article::create(
     identifier: 'my-internal-id-123',
     title: 'The Future of Web Development',
     language: 'en',
-    columns: 7, // Default ANF grid columns
-    width: 1024 // Default points
+    columns: 7,
+    width: 1024
 );
 ```
 
-#### B. Add Metadata
-Metadata includes author information, keywords, and URLs for discovery.
+#### Add Metadata
+
 ```php
 use TomGould\AppleNews\Document\Metadata;
 
@@ -93,8 +138,8 @@ $metadata = (new Metadata())
 $article->setMetadata($metadata);
 ```
 
-#### C. Define Reusable Styles
-Instead of styling every component manually, define reusable text and component styles.
+#### Define Reusable Styles
+
 ```php
 use TomGould\AppleNews\Document\Styles\ComponentTextStyle;
 
@@ -107,8 +152,8 @@ $bodyStyle = (new ComponentTextStyle())
 $article->addComponentTextStyle('defaultBody', $bodyStyle);
 ```
 
-#### D. Add Components
-Components represent the content of your article. Roles define their semantic meaning.
+#### Add Components
+
 ```php
 use TomGould\AppleNews\Document\Components\{Title, Body, Photo, Heading, Divider};
 
@@ -123,53 +168,101 @@ $article
     );
 ```
 
-### 4. Working with Assets
+### Available Components
 
-#### Bundle Assets (Multipart)
-If you have local images, reference them using `bundle://` URLs. The client will package them as a multipart request automatically.
+| Component | Description |
+|-----------|-------------|
+| `Title` | Article title |
+| `Heading` | Section headings (levels 1-6) |
+| `Body` | Paragraph text |
+| `Photo` | Single image |
+| `Gallery` | Image gallery |
+| `Video` | Native video |
+| `EmbedWebVideo` | YouTube/Vimeo embeds |
+| `Tweet` | Twitter/X embeds |
+| `Instagram` | Instagram embeds |
+| `FacebookPost` | Facebook embeds |
+| `Pullquote` | Highlighted quotes |
+| `Caption` | Image/video captions |
+| `Divider` | Visual separator |
+| `LinkButton` | Call-to-action buttons |
+| `Container` | Group components together |
+
+### Working with Assets
+
+#### Bundle Assets (Local Files)
 
 ```php
-use TomGould\AppleNews\Document\Components\Photo;
-
 $article->addComponent(Photo::fromBundle('hero.jpg'));
 
-// When publishing, provide the local path or binary content
+// Provide the file path when publishing
 $assets = [
-    'bundle://hero.jpg' => __DIR__ . '/images/hero.jpg'
+    'bundle://hero.jpg' => '/path/to/hero.jpg'
 ];
+
+$client->createArticle($channelId, $article, null, $assets);
 ```
 
 #### Remote Assets
-You can also use direct HTTPS URLs. These do not need to be included in the publish request.
+
 ```php
-$article->addComponent(Photo::fromUrl('https://example.com/cdn/remote-image.jpg'));
+$article->addComponent(
+    Photo::fromUrl('https://example.com/image.jpg')
+);
 ```
 
-### 5. Publishing to Apple News
+### API Operations
 
-Use the client to send your article to a specific channel. You can also provide API-level metadata (like sections) here.
+#### Channels
 
 ```php
+$channel = $client->getChannel($channelId);
+$quota = $client->getChannelQuota($channelId);
+```
+
+#### Sections
+
+```php
+$sections = $client->listSections($channelId);
+$section = $client->getSection($sectionId);
+$client->promoteArticles($sectionId, ['article-id-1', 'article-id-2']);
+```
+
+#### Articles
+
+```php
+// Create
+$response = $client->createArticle($channelId, $article, $metadata, $assets);
+
+// Read
+$article = $client->getArticle($articleId);
+
+// Search
+$results = $client->searchArticlesInChannel($channelId, ['pageSize' => 20]);
+
+// Update (requires revision token)
+$client->updateArticle($articleId, $revision, $updatedArticle);
+
+// Delete
+$client->deleteArticle($articleId);
+```
+
+### Error Handling
+
+```php
+use TomGould\AppleNews\Exception\AppleNewsException;
+use TomGould\AppleNews\Exception\AuthenticationException;
+
 try {
-    $response = $client->createArticle(
-        channelId: 'your-channel-uuid',
-        article: $article,
-        metadata: [
-            'isSponsored' => false,
-            'links' => [
-                'sections' => ['https://news-api.apple.com/sections/your-section-uuid']
-            ]
-        ],
-        assets: $assets
-    );
-
-    $articleId = $response['data']['id'];
-    $shareUrl = $response['data']['shareUrl'];
-    echo "Published successfully! Article ID: $articleId";
-
-} catch (\TomGould\AppleNews\Exception\AppleNewsException $e) {
-    // Handle API errors (Validation, Auth, Quota, etc.)
-    echo "API Error: " . $e->getMessage() . " (" . $e->getErrorCode() . ")";
+    $client->createArticle($channelId, $article);
+} catch (AuthenticationException $e) {
+    // Invalid API credentials (401/403)
+    echo "Auth failed: " . $e->getMessage();
+} catch (AppleNewsException $e) {
+    // Other API errors
+    echo "Error: " . $e->getMessage();
+    echo "Code: " . $e->getErrorCode();    // e.g., 'INVALID_DOCUMENT'
+    echo "Field: " . $e->getKeyPath();      // e.g., 'components[0].text'
 }
 ```
 
@@ -177,29 +270,48 @@ try {
 
 ## Generating Documentation
 
-You can generate a local HTML API reference using [phpDocumentor](https://www.phpdoc.org/).
-
-### First-time setup
-
-Download the phpDocumentor PHAR file:
+Generate a local HTML API reference:
 
 ```bash
+# First-time setup
 mkdir -p tools
 composer docs:install
-```
 
-### Generate the docs
-
-```bash
+# Generate docs
 composer docs
 ```
 
-### View the docs
-
-Open `docs/api/index.html` in your web browser.
+Open `docs/api/index.html` in your browser.
 
 ---
 
-## Detailed Documentation
+## Testing
 
-Detailed PHPDoc documentation is available for every class and method in the `src/` directory.
+```bash
+# Run tests
+composer test
+
+# Run with coverage report
+composer test:coverage
+```
+
+---
+
+## Contributing
+
+Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details.
+
+---
+
+## License
+
+This library is open-sourced software licensed under the [MIT license](LICENSE).
+
+---
+
+## Links
+
+- [Apple News Format Documentation](https://developer.apple.com/documentation/applenews/apple_news_format)
+- [Apple News API Documentation](https://developer.apple.com/documentation/applenews/apple_news_api)
+- [Packagist Package](https://packagist.org/packages/tomgould/apple-news-api)
+- [GitHub Repository](https://github.com/tomgould/apple-news-api)

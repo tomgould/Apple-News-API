@@ -7,7 +7,7 @@ namespace TomGould\AppleNews\Document\Components;
 /**
  * Component for embedding X/Twitter posts.
  *
- * @see https://developer.apple.com/documentation/apple_news/tweet
+ * @see https://developer.apple.com/documentation/applenews/tweet
  */
 final class Tweet extends Component
 {
@@ -34,4 +34,3 @@ final class Tweet extends Component
         return $data;
     }
 }
-
