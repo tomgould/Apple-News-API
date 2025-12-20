@@ -1,4 +1,3 @@
-
 Handles HMAC-SHA256 authentication for Apple News API requests.
 
 Apple News uses a custom HMAC authentication scheme (HHMAC) where requests are
@@ -81,8 +80,7 @@ Returns the header value and the date string used.
 
 **Throws:**
 
-if the secret key cannot be decoded.
-- [`InvalidArgumentException`](../../../InvalidArgumentException)
+- [`InvalidArgumentException`](https://www.php.net/manual/en/class.invalidargumentexception.php) if the secret key cannot be decoded.
 
 ***
 
@@ -129,8 +127,7 @@ Base64 encoded signature.
 
 **Throws:**
 
-if the secret is not valid Base64.
-- [`InvalidArgumentException`](../../../InvalidArgumentException)
+- [`InvalidArgumentException`](https://www.php.net/manual/en/class.invalidargumentexception.php) if the secret is not valid Base64.
 
 ***
 
@@ -143,3 +140,4 @@ public getKeyId(): string
 ```
 
 ***
+

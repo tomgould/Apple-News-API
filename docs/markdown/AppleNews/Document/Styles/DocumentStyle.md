@@ -1,4 +1,3 @@
-
 Global styles applied to the entire article document.
 
 ***
@@ -6,7 +5,7 @@ Global styles applied to the entire article document.
 * Full name: `\TomGould\AppleNews\Document\Styles\DocumentStyle`
 * This class is marked as **final** and can't be subclassed
 * This class implements:
-  `JsonSerializable`
+  [`JsonSerializable`](https://www.php.net/manual/en/class.jsonserializable.php)
 * This class is a **Final class**
 
 **See Also:**
@@ -48,3 +47,4 @@ public jsonSerialize(): array<string,mixed>
 ```
 
 ***
+

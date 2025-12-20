@@ -1,4 +1,3 @@
-
 Base class for all Apple News Format (ANF) components.
 
 All content in an Apple News article is built using components. This base
@@ -8,7 +7,7 @@ class provides common properties like layouts, styles, and behaviors.
 
 * Full name: `\TomGould\AppleNews\Document\Components\Component`
 * This class implements:
-  `JsonSerializable`
+  [`JsonSerializable`](https://www.php.net/manual/en/class.jsonserializable.php)
 * This class is an **Abstract class**
 
 **See Also:**
@@ -92,6 +91,7 @@ public getRole(): string
 ```
 
 * This method is **abstract**.
+
 ***
 
 ### setIdentifier
@@ -253,3 +253,4 @@ public jsonSerialize(): array<string,mixed>
 ```
 
 ***
+

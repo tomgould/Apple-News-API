@@ -1,10 +1,9 @@
-
 Exception thrown specifically when API authentication fails (401/403 errors).
 
 ***
 
 * Full name: `\TomGould\AppleNews\Exception\AuthenticationException`
-* Parent class: [`\TomGould\AppleNews\Exception\AppleNewsException`](./AppleNewsException)
+* Parent class: [`\TomGould\AppleNews\Exception\AppleNewsException`](./AppleNewsException.md)
 
 ## Inherited methods
 
@@ -55,6 +54,7 @@ public static fromResponse(array<string,mixed> $response, int $httpCode = 0): se
 ```
 
 * This method is **static**.
+
 **Parameters:**
 
 | Parameter   | Type                    | Description                         |
@@ -63,3 +63,4 @@ public static fromResponse(array<string,mixed> $response, int $httpCode = 0): se
 | `$httpCode` | **int**                 | HTTP status code from the response. |
 
 ***
+

@@ -1,4 +1,3 @@
-
 Detailed text styling options for components.
 
 This class controls typography including fonts, colors, spacing, and alignment.
@@ -8,7 +7,7 @@ This class controls typography including fonts, colors, spacing, and alignment.
 * Full name: `\TomGould\AppleNews\Document\Styles\ComponentTextStyle`
 * This class is marked as **final** and can't be subclassed
 * This class implements:
-  `JsonSerializable`
+  [`JsonSerializable`](https://www.php.net/manual/en/class.jsonserializable.php)
 * This class is a **Final class**
 
 **See Also:**

@@ -1,4 +1,3 @@
-
 Article metadata for Apple News Format.
 
 Metadata provides information about the article that is not part of the
@@ -9,7 +8,7 @@ document content itself, such as authors, canonical URLs, and keywords.
 * Full name: `\TomGould\AppleNews\Document\Metadata`
 * This class is marked as **final** and can't be subclassed
 * This class implements:
-  `JsonSerializable`
+  [`JsonSerializable`](https://www.php.net/manual/en/class.jsonserializable.php)
 * This class is a **Final class**
 
 **See Also:**
@@ -380,3 +379,4 @@ public jsonSerialize(): array<string,mixed>
 ```
 
 ***
+

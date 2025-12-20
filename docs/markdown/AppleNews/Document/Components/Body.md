@@ -1,10 +1,9 @@
-
 The standard text component for body paragraphs.
 
 ***
 
 * Full name: `\TomGould\AppleNews\Document\Components\Body`
-* Parent class: [`\TomGould\AppleNews\Document\Components\TextComponent`](./TextComponent)
+* Parent class: [`\TomGould\AppleNews\Document\Components\TextComponent`](./TextComponent.md)
 * This class is marked as **final** and can't be subclassed
 * This class is a **Final class**
 
@@ -35,6 +34,7 @@ public getRole(): string
 ```
 
 * This method is **abstract**.
+
 ***
 
 ### setIdentifier
@@ -258,3 +258,4 @@ public setFormat(string $format): static
 | `$format` | **string** |             |
 
 ***
+

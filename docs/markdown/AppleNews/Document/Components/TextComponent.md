@@ -1,10 +1,9 @@
-
 Base class for all components that primarily contain text content.
 
 ***
 
 * Full name: `\TomGould\AppleNews\Document\Components\TextComponent`
-* Parent class: [`\TomGould\AppleNews\Document\Components\Component`](./Component)
+* Parent class: [`\TomGould\AppleNews\Document\Components\Component`](./Component.md)
 * This class is an **Abstract class**
 
 **See Also:**
@@ -130,6 +129,7 @@ public getRole(): string
 ```
 
 * This method is **abstract**.
+
 ***
 
 ### setIdentifier
@@ -282,12 +282,3 @@ protected getBaseProperties(): array<string,mixed>
 
 ***
 
-### jsonSerialize
-
-Implementation of JsonSerializable.
-
-```php
-public jsonSerialize(): array<string,mixed>
-```
-
-***

@@ -1,10 +1,9 @@
-
 A call-to-action button that links to an external URL or article section.
 
 ***
 
 * Full name: `\TomGould\AppleNews\Document\Components\LinkButton`
-* Parent class: [`\TomGould\AppleNews\Document\Components\Component`](./Component)
+* Parent class: [`\TomGould\AppleNews\Document\Components\Component`](./Component.md)
 * This class is marked as **final** and can't be subclassed
 * This class is a **Final class**
 
@@ -102,6 +101,7 @@ public getRole(): string
 ```
 
 * This method is **abstract**.
+
 ***
 
 ### setIdentifier
@@ -254,12 +254,3 @@ protected getBaseProperties(): array<string,mixed>
 
 ***
 
-### jsonSerialize
-
-Implementation of JsonSerializable.
-
-```php
-public jsonSerialize(): array<string,mixed>
-```
-
-***

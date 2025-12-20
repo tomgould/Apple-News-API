@@ -1,4 +1,3 @@
-
 Component for displaying single images in an article.
 
 Supports remote URLs and local bundle resources.
@@ -6,7 +5,7 @@ Supports remote URLs and local bundle resources.
 ***
 
 * Full name: `\TomGould\AppleNews\Document\Components\Photo`
-* Parent class: [`\TomGould\AppleNews\Document\Components\Component`](./Component)
+* Parent class: [`\TomGould\AppleNews\Document\Components\Component`](./Component.md)
 * This class is marked as **final** and can't be subclassed
 * This class is a **Final class**
 
@@ -73,6 +72,7 @@ public static fromBundle(string $filename): self
 ```
 
 * This method is **static**.
+
 **Parameters:**
 
 | Parameter   | Type       | Description |
@@ -90,6 +90,7 @@ public static fromUrl(string $url): self
 ```
 
 * This method is **static**.
+
 **Parameters:**
 
 | Parameter | Type       | Description |
@@ -177,6 +178,7 @@ public getRole(): string
 ```
 
 * This method is **abstract**.
+
 ***
 
 ### setIdentifier
@@ -329,12 +331,3 @@ protected getBaseProperties(): array<string,mixed>
 
 ***
 
-### jsonSerialize
-
-Implementation of JsonSerializable.
-
-```php
-public jsonSerialize(): array<string,mixed>
-```
-
-***

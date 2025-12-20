@@ -1,4 +1,3 @@
-
 Base exception class for all errors returned by the Apple News API.
 
 This class parses the standardized error format returned by Apple and
@@ -7,7 +6,7 @@ provides access to specific API error codes and key paths (field names).
 ***
 
 * Full name: `\TomGould\AppleNews\Exception\AppleNewsException`
-* Parent class: [`Exception`](../../../Exception)
+* Parent class: [`Exception`](https://www.php.net/manual/en/class.exception.php)
 
 ## Properties
 
@@ -76,6 +75,7 @@ public static fromResponse(array<string,mixed> $response, int $httpCode = 0): se
 ```
 
 * This method is **static**.
+
 **Parameters:**
 
 | Parameter   | Type                    | Description                         |
@@ -84,3 +84,4 @@ public static fromResponse(array<string,mixed> $response, int $httpCode = 0): se
 | `$httpCode` | **int**                 | HTTP status code from the response. |
 
 ***
+

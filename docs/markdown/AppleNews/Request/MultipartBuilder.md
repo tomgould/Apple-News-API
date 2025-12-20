@@ -1,4 +1,3 @@
-
 Builds multipart/form-data request bodies for the Apple News API.
 
 Apple News requires articles to be submitted as MIME multipart messages.
@@ -105,7 +104,7 @@ public addMetadata(array<string,mixed> $metadata): self
 
 **Throws:**
 
-- [`JsonException`](../../../JsonException)
+- [`JsonException`](https://www.php.net/manual/en/class.jsonexception.php)
 
 ***
 
@@ -126,10 +125,8 @@ public addImageFile(string $name, string $filePath): self
 
 **Throws:**
 
-if file doesn't exist.
-- [`InvalidArgumentException`](../../../InvalidArgumentException)
-if file cannot be read.
-- [`RuntimeException`](../../../RuntimeException)
+- [`InvalidArgumentException`](https://www.php.net/manual/en/class.invalidargumentexception.php) if file doesn't exist.
+- [`RuntimeException`](https://www.php.net/manual/en/class.runtimeexception.php) if file cannot be read.
 
 ***
 
@@ -234,3 +231,4 @@ private guessImageContentType(string $filename): string
 | `$filename` | **string** |             |
 
 ***
+

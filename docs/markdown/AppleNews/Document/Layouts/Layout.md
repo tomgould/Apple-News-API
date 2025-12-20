@@ -1,4 +1,3 @@
-
 Defines the column system and base grid for an article.
 
 Every Apple News article requires a layout object to determine how components
@@ -9,7 +8,7 @@ are positioned relative to the grid columns.
 * Full name: `\TomGould\AppleNews\Document\Layouts\Layout`
 * This class is marked as **final** and can't be subclassed
 * This class implements:
-  `JsonSerializable`
+  [`JsonSerializable`](https://www.php.net/manual/en/class.jsonserializable.php)
 * This class is a **Final class**
 
 **See Also:**
@@ -106,3 +105,4 @@ public jsonSerialize(): array<string,mixed>
 ```
 
 ***
+

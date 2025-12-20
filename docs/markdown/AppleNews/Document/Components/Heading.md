@@ -1,10 +1,9 @@
-
 A heading component (supports levels 1 through 6).
 
 ***
 
 * Full name: `\TomGould\AppleNews\Document\Components\Heading`
-* Parent class: [`\TomGould\AppleNews\Document\Components\TextComponent`](./TextComponent)
+* Parent class: [`\TomGould\AppleNews\Document\Components\TextComponent`](./TextComponent.md)
 * This class is marked as **final** and can't be subclassed
 * This class is a **Final class**
 
@@ -60,6 +59,7 @@ public getRole(): string
 ```
 
 * This method is **abstract**.
+
 ***
 
 ### setIdentifier
@@ -222,20 +222,6 @@ public jsonSerialize(): array<string,mixed>
 
 ***
 
-### __construct
-
-```php
-public __construct(string $text): mixed
-```
-
-**Parameters:**
-
-| Parameter | Type       | Description           |
-|-----------|------------|-----------------------|
-| `$text`   | **string** | The raw text content. |
-
-***
-
 ### setTextStyle
 
 Set the text style name.
@@ -283,3 +269,4 @@ public setFormat(string $format): static
 | `$format` | **string** |             |
 
 ***
+

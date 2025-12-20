@@ -1,4 +1,3 @@
-
 Represents an Apple News Format (ANF) article document.
 
 The Article class is the root of the document tree. It holds the content
@@ -10,7 +9,7 @@ it produces the `article.json` file required by the Apple News API.
 * Full name: `\TomGould\AppleNews\Document\Article`
 * This class is marked as **final** and can't be subclassed
 * This class implements:
-  `JsonSerializable`
+  [`JsonSerializable`](https://www.php.net/manual/en/class.jsonserializable.php)
 * This class is a **Final class**
 
 **See Also:**
@@ -150,6 +149,7 @@ public static create(string $identifier, string $title, string $language = 'en',
 ```
 
 * This method is **static**.
+
 **Parameters:**
 
 | Parameter     | Type       | Description                          |
@@ -355,8 +355,7 @@ public toJson(int $flags = \TomGould\AppleNews\Document\JSON_PRETTY_PRINT | \Tom
 
 **Throws:**
 
-if serialization fails.
-- [`JsonException`](../../../JsonException)
+- [`JsonException`](https://www.php.net/manual/en/class.jsonexception.php) if serialization fails.
 
 ***
 
@@ -369,3 +368,4 @@ public jsonSerialize(): array<string,mixed>
 ```
 
 ***
+

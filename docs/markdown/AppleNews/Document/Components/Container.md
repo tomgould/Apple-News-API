@@ -1,4 +1,3 @@
-
 A container component used to group other components together.
 
 Containers are useful for applying shared layouts, backgrounds, or behaviors
@@ -7,7 +6,7 @@ to a set of child components.
 ***
 
 * Full name: `\TomGould\AppleNews\Document\Components\Container`
-* Parent class: [`\TomGould\AppleNews\Document\Components\Component`](./Component)
+* Parent class: [`\TomGould\AppleNews\Document\Components\Component`](./Component.md)
 
 **See Also:**
 
@@ -96,6 +95,7 @@ public getRole(): string
 ```
 
 * This method is **abstract**.
+
 ***
 
 ### setIdentifier
@@ -248,12 +248,3 @@ protected getBaseProperties(): array<string,mixed>
 
 ***
 
-### jsonSerialize
-
-Implementation of JsonSerializable.
-
-```php
-public jsonSerialize(): array<string,mixed>
-```
-
-***
