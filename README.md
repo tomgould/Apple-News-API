@@ -142,7 +142,7 @@ $assets = [
 #### Remote Assets
 You can also use direct HTTPS URLs. These do not need to be included in the publish request.
 ```php
-$article->addComponent(Photo::fromUrl('[https://example.com/cdn/remote-image.jpg](https://example.com/cdn/remote-image.jpg)'));
+$article->addComponent(Photo::fromUrl('https://example.com/cdn/remote-image.jpg'));
 ```
 
 ### 5. Publishing to Apple News
@@ -157,7 +157,7 @@ try {
         metadata: [
             'isSponsored' => false,
             'links' => [
-                'sections' => ['[https://news-api.apple.com/sections/your-section-uuid](https://news-api.apple.com/sections/your-section-uuid)']
+                'sections' => ['https://news-api.apple.com/sections/your-section-uuid']
             ]
         ],
         assets: $assets
@@ -173,40 +173,33 @@ try {
 }
 ```
 
-### 6. Updating & Managing Articles
+---
 
-#### Read Information
-```php
-$info = $client->getArticle($articleId);
-$revision = $info['data']['revision']; // Needed for updates
+## Generating Documentation
+
+You can generate a local HTML API reference using [phpDocumentor](https://www.phpdoc.org/).
+
+### First-time setup
+
+Download the phpDocumentor PHAR file:
+
+```bash
+mkdir -p tools
+composer docs:install
 ```
 
-#### Update Content
-Updates require the previous `revision` token to prevent overwriting concurrent changes.
-```php
-$client->updateArticle(
-    articleId: $articleId,
-    revision: $revision,
-    article: $updatedArticle
-);
+### Generate the docs
+
+```bash
+composer docs
 ```
 
-#### Search
-```php
-$results = $client->searchArticlesInChannel($channelId, [
-    'pageSize' => 5,
-    'sortDir' => 'DESC'
-]);
-```
+### View the docs
 
-#### Delete
-```php
-$client->deleteArticle($articleId);
-```
+Open `docs/api/index.html` in your web browser.
 
 ---
 
 ## Detailed Documentation
 
 Detailed PHPDoc documentation is available for every class and method in the `src/` directory.
-
