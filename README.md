@@ -283,7 +283,7 @@ composer docs
 
 Open `docs/api/index.html` in your browser.
 
-Or visit the online docs pages: [Apple News API PHPDoc Documentation](https://www.dealmobile.co.uk/docs/api/)
+Or visit the online docs pages: [Apple News API PHPDoc Documentation](https://www.dealmobile.co.uk/docs/html/)
 
 ---
 
