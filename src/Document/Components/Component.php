@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TomGould\AppleNews\Document\Components;
 
 use JsonSerializable;
+use TomGould\AppleNews\Document\Animations\AnimationInterface;
 use TomGould\AppleNews\Document\Behaviors\BehaviorInterface;
 
 /**
@@ -101,7 +102,7 @@ abstract class Component implements JsonSerializable
     }
 
     /**
-     * Set component animation.
+     * Set component animation using an array.
      *
      * @param array<string, mixed> $animation Animation properties.
      *
@@ -112,6 +113,25 @@ abstract class Component implements JsonSerializable
     public function setAnimation(array $animation): static
     {
         $this->animation = $animation;
+        return $this;
+    }
+
+    /**
+     * Set the component animation using a typed Animation object.
+     *
+     * This method provides type-safe animation configuration:
+     * ```php
+     * $photo->setAnimationObject(FadeInAnimation::fromTransparent());
+     * $body->setAnimationObject(MoveInAnimation::fromLeft());
+     * ```
+     *
+     * @param AnimationInterface $animation The animation object.
+     *
+     * @return static
+     */
+    public function setAnimationObject(AnimationInterface $animation): static
+    {
+        $this->animation = $animation->jsonSerialize();
         return $this;
     }
 
