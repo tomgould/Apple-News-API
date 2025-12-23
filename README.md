@@ -13,9 +13,10 @@ A modern, PSR-compliant PHP library for the Apple News Publisher API with full A
 - 🚀 **Modern PHP 8.1+** with strict types and named arguments
 - 🔌 **PSR-18 HTTP Client** compatible (works with Guzzle, Symfony, etc.)
 - 📝 **Full Apple News Format** support with a fluent, object-oriented document builder
+- 🎨 **Complete ANF Coverage** — 45+ components, animations, behaviors, scenes, and conditional styles
 - 🔐 **HMAC-SHA256 Authentication** handled automatically
 - 📦 **Zero Framework Dependencies** — use with any framework or standalone
-- ✅ **Thoroughly Tested** — 99%+ code coverage
+- ✅ **Thoroughly Tested** — 99.9%+ code coverage
 
 ## Requirements
 
@@ -133,7 +134,8 @@ $metadata = (new Metadata())
     ->addAuthor('Jane Doe')
     ->setExcerpt('An in-depth look at modern web frameworks.')
     ->addKeywords(['PHP', 'Web', 'Programming'])
-    ->setDatePublished(new DateTime());
+    ->setDatePublished(new DateTime())
+    ->setContentGenerationType('none'); // AI disclosure
 
 $article->setMetadata($metadata);
 ```
@@ -170,23 +172,177 @@ $article
 
 ### Available Components
 
+#### Text Components
+
 | Component | Description |
 |-----------|-------------|
 | `Title` | Article title |
 | `Heading` | Section headings (levels 1-6) |
 | `Body` | Paragraph text |
+| `Intro` | Introduction/lead paragraph |
+| `Caption` | Image/video captions |
+| `Pullquote` | Highlighted quotes |
+| `Quote` | Block quotes |
+| `Byline` | Author byline |
+| `Author` | Author name |
+| `Illustrator` | Illustrator credit |
+| `Photographer` | Photographer credit |
+
+#### Media Components
+
+| Component | Description |
+|-----------|-------------|
 | `Photo` | Single image |
+| `Figure` | Image with caption |
+| `Portrait` | Portrait-oriented image |
+| `Logo` | Publication logo |
 | `Gallery` | Image gallery |
+| `Mosaic` | Mosaic image layout |
 | `Video` | Native video |
-| `EmbedWebVideo` | YouTube/Vimeo embeds |
+| `Audio` | Audio player |
+| `Music` | Apple Music integration |
+| `Podcast` | Podcast embed |
+| `ARKit` | AR Quick Look experiences |
+
+#### Social Embeds
+
+| Component | Description |
+|-----------|-------------|
 | `Tweet` | Twitter/X embeds |
 | `Instagram` | Instagram embeds |
 | `FacebookPost` | Facebook embeds |
-| `Pullquote` | Highlighted quotes |
-| `Caption` | Image/video captions |
-| `Divider` | Visual separator |
-| `LinkButton` | Call-to-action buttons |
+| `TikTok` | TikTok embeds |
+| `EmbedWebVideo` | YouTube/Vimeo embeds |
+
+#### Structure Components
+
+| Component | Description |
+|-----------|-------------|
 | `Container` | Group components together |
+| `Section` | Article section |
+| `Chapter` | Chapter division |
+| `Header` | Section header |
+| `Footer` | Section footer |
+| `Aside` | Sidebar content |
+| `Divider` | Visual separator |
+| `FlexibleSpacer` | Flexible spacing in horizontal stacks |
+
+#### Data Components
+
+| Component | Description |
+|-----------|-------------|
+| `DataTable` | Data-driven table |
+| `HTMLTable` | HTML-based table |
+| `Map` | Interactive map |
+| `Place` | Location marker |
+
+#### Interactive Components
+
+| Component | Description |
+|-----------|-------------|
+| `LinkButton` | Call-to-action buttons |
+| `BannerAdvertisement` | Banner ad placement |
+| `MediumRectangleAdvertisement` | Medium rectangle ad |
+| `ReplicaAdvertisement` | Print replica ad |
+
+### Animations, Behaviors & Scenes
+
+#### Animations
+
+```php
+use TomGould\AppleNews\Document\Animations\{
+    AppearAnimation,
+    FadeInAnimation,
+    MoveInAnimation,
+    ScaleFadeAnimation
+};
+
+// Fade in animation
+$component->setAnimation(FadeInAnimation::standard());
+
+// Move in from left
+$component->setAnimation(MoveInAnimation::fromLeft());
+
+// Scale and fade
+$component->setAnimation(ScaleFadeAnimation::subtle());
+```
+
+#### Behaviors
+
+```php
+use TomGould\AppleNews\Document\Behaviors\{
+    Parallax,
+    Springy,
+    BackgroundParallax
+};
+
+// Parallax scrolling effect
+$component->setBehavior(Parallax::withFactor(0.5));
+
+// Spring physics
+$component->setBehavior(Springy::create());
+
+// Background parallax
+$component->setBehavior(BackgroundParallax::withFactor(0.8));
+```
+
+#### Scenes (for Headers)
+
+```php
+use TomGould\AppleNews\Document\Scenes\{
+    FadingStickyHeader,
+    ParallaxScaleHeader
+};
+
+// Fading sticky header
+$header->setScene(FadingStickyHeader::create());
+
+// Parallax scale header
+$header->setScene(ParallaxScaleHeader::create());
+```
+
+### Responsive Design with Conditions
+
+```php
+use TomGould\AppleNews\Document\Layouts\Condition;
+use TomGould\AppleNews\Document\Conditionals\{
+    ConditionalComponentStyle,
+    ConditionalTextStyle,
+    ConditionalComponentLayout
+};
+
+// Dark mode styling
+$darkStyle = ConditionalComponentStyle::darkMode('#1C1C1E');
+
+// Compact width layout
+$compactLayout = ConditionalComponentLayout::fullWidthOnCompact();
+
+// Viewport-based conditions
+$condition = Condition::viewportWidth(375, 768);
+
+// Platform-specific
+$iosCondition = Condition::iOS();
+$macCondition = Condition::macOS();
+```
+
+### Fills and Backgrounds
+
+```php
+use TomGould\AppleNews\Document\Styles\Fills\{
+    ImageFill,
+    LinearGradientFill,
+    VideoFill
+};
+
+// Image background
+$fill = ImageFill::fromUrl('https://example.com/bg.jpg')->asCover();
+
+// Gradient background
+$gradient = LinearGradientFill::vertical('#000000', '#333333');
+
+// Video background
+$video = VideoFill::fromUrl('https://example.com/bg.mp4')->setLoop(true);
+```
 
 ### Working with Assets
 
@@ -231,8 +387,17 @@ $client->promoteArticles($sectionId, ['article-id-1', 'article-id-2']);
 #### Articles
 
 ```php
-// Create
-$response = $client->createArticle($channelId, $article, $metadata, $assets);
+use TomGould\AppleNews\Request\ArticleMetadata;
+use TomGould\AppleNews\Enum\MaturityRating;
+
+// Create with metadata
+$metadata = (new ArticleMetadata())
+    ->setIsSponsored(false)
+    ->setIsCandidateToBeFeatured(true)
+    ->setMaturityRating(MaturityRating::GENERAL)
+    ->addTargetTerritories(['US', 'GB', 'CA']);
+
+$response = $client->createArticle($channelId, $article, $metadata->toArray(), $assets);
 
 // Read
 $article = $client->getArticle($articleId);
