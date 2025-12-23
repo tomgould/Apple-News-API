@@ -434,21 +434,24 @@ try {
 ---
 
 ## Generating Documentation
+## Generating Documentation
 
-Generate a local HTML API reference:
-
+Generate a local API reference:
 ```bash
 # First-time setup
 mkdir -p tools
 composer docs:install
 
-# Generate docs
+# Generate HTML docs
 composer docs
+
+# Generate Markdown docs
+composer docsmd
 ```
 
-Open `docs/api/index.html` in your browser.
+Open `docs/html/index.html` in your browser, or browse the Markdown docs in `docs/markdown/`.
 
-Or visit the online docs pages: [Apple News API PHPDoc Documentation](https://www.dealmobile.co.uk/docs/html/)
+Or visit the online docs: [Apple News API PHPDoc Documentation](https://www.dealmobile.co.uk/docs/html/)
 
 ---
 

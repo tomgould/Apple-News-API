@@ -61,8 +61,12 @@
         "analyse": "phpstan analyse src --level=8",
         "cs-fix": "php-cs-fixer fix src",
         "docs:install": "curl -sSL https://phpdoc.org/phpDocumentor.phar -o tools/phpDocumentor.phar && chmod +x tools/phpDocumentor.phar",
-        "docs": "php tools/phpDocumentor.phar run -d src -t docs/api --title='Apple News API PHP Client'",
-        "docsmd": "php tools/phpDocumentor.phar run -d src -t docs/api --template='vendor/saggre/phpdocumentor-markdown/themes/markdown' --title='Apple News API PHP Client'"
+        "docs": "php tools/phpDocumentor.phar run -d src -t docs/html --title='Apple News API PHP Client'",
+        "docsmd": [
+            "rm -rf .phpdoc/",
+            "php tools/phpDocumentor.phar run -d src -t docs/markdown --template='vendor/saggre/phpdocumentor-markdown/themes/markdown' --title='Apple News API PHP Client'",
+            "php tools/fix-md-links.php docs/markdown"
+        ]
 
     },
     "config": {
