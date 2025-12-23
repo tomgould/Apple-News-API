@@ -1,73 +1,76 @@
 <?php
 /**
- * Fix markdown links missing .md extension and incorrect directory paths.
+ * Advanced Markdown Link Fixer
+ * Logic:
+ * 1. Identify relative links in Markdown.
+ * 2. Check if the target exists as a .md file.
+ * 3. If not, check if it exists as a directory.
+ * 4. Update the link accordingly to ensure it works on GitHub.
  */
-$dir = $argv[1] ?? 'docs/markdown';
 
-if (!is_dir($dir)) {
-    echo "Directory not found: $dir\n";
+$baseDir = realpath($argv[1] ?? 'docs/markdown');
+
+if (!$baseDir || !is_dir($baseDir)) {
+    echo "Directory not found: " . ($argv[1] ?? 'docs/markdown') . "\n";
     exit(1);
 }
 
 $iterator = new RecursiveIteratorIterator(
-    new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS)
+    new RecursiveDirectoryIterator($baseDir, RecursiveDirectoryIterator::SKIP_DOTS)
 );
 
 foreach ($iterator as $file) {
-    if ($file->getExtension() !== 'md') {
-        continue;
-    }
+    if ($file->getExtension() !== 'md') continue;
 
-    $content = file_get_contents($file->getPathname());
-    $original = $content;
+    $filePath = $file->getPathname();
+    $currentDir = dirname($filePath);
+    $content = file_get_contents($filePath);
+    $originalContent = $content;
 
-    /**
-     * FIX 1: Add .md extension to local paths that don't have one.
-     * This targets links like [Text](../Path/ClassName) but ignores external URLs.
-     */
-    $content = preg_replace(
-        '/\]\(((?!\w+:\/\/)(?:(?:\.\.\/)+|(?:\.\/)+|classes\/)[^)\s.]+)(?<!\.md)\)/i',
-        ']($1.md)',
-        $content
-    );
+    // Regex to find Markdown links: [text](url)
+    // Excludes external URLs (http/https)
+    $content = preg_replace_callback('/\]\((?!https?:\/\/)([^)]+)\)/', function($matches) use ($currentDir, $baseDir) {
+        $originalUrl = $matches[1];
 
-    /**
-     * FIX 2: Correct links to base PHP classes (like Exception)
-     * If a link points to ../../../Exception.md, it's often broken.
-     * This logic detects "Parent class" or "Throws" links pointing to root classes
-     * and ensures they are reachable or correctly formatted.
-     */
-    $content = preg_replace_callback('/\]\(((\.\.\/)+)([^)]+\.md)\)/', function($matches) {
-        $pathPrefix = $matches[1];
-        $fileName = $matches[3];
+        // Remove any existing .md to standardize the search
+        $cleanUrl = preg_replace('/\.md$/', '', $originalUrl);
 
-        // List of common base PHP classes that often get broken root links
-        $baseClasses = ['Exception.md', 'JsonException.md', 'RuntimeException.md', 'InvalidArgumentException.md', 'Throwable.md'];
+        // Determine the absolute path on disk for the link target
+        // If it starts with 'classes/', it's relative to the baseDir, otherwise relative to currentDir
+        if (str_starts_with($cleanUrl, 'classes/')) {
+            $testPath = $baseDir . DIRECTORY_SEPARATOR . ltrim($cleanUrl, '/');
+        } else {
+            $testPath = $currentDir . DIRECTORY_SEPARATOR . ltrim($cleanUrl, '/');
+        }
 
-        if (in_array($fileName, $baseClasses)) {
-            // Option A: Keep them relative but ensure they don't break.
-            // In many cases, these files don't actually exist in your MD export.
-            // If you want to link back to the class itself if the file is missing:
-            return "]($fileName)";
+        $realPath = realpath($testPath);
+
+        // Case 1: The target exists exactly as a .md file
+        if (file_exists($testPath . '.md')) {
+            return "]($cleanUrl.md)";
+        }
+
+        // Case 2: The target is a directory (GitHub handles this as a folder view)
+        if (is_dir($testPath)) {
+            return "]($cleanUrl/)";
+        }
+
+        // Case 3: Handle the phpDocumentor "best guess" root links (like classes/Exception)
+        // If it points to root/classes/Exception and it doesn't exist,
+        // link to the directory of the current file instead.
+        if (str_contains($cleanUrl, 'classes/') && !file_exists($testPath)) {
+            $parts = explode('/', $cleanUrl);
+            $className = end($parts);
+            return "]($className)"; // Falls back to current directory link
         }
 
         return $matches[0];
     }, $content);
 
-    /**
-     * FIX 3: Specific ClassName-only links
-     * e.g. [LinkAddition](LinkAddition) -> [LinkAddition](LinkAddition.md)
-     */
-    $content = preg_replace(
-        '/\]\(([A-Z][a-zA-Z0-9_]*)(?<!\.md)\)/',
-        ']($1.md)',
-        $content
-    );
-
-    if ($content !== $original) {
-        file_put_contents($file->getPathname(), $content);
-        echo "Fixed links in: {$file->getPathname()}\n";
+    if ($content !== $originalContent) {
+        file_put_contents($filePath, $content);
+        echo "Validated links in: " . str_replace($baseDir, '', $filePath) . "\n";
     }
 }
 
-echo "Done fixing documentation links!\n";
+echo "Link validation complete!\n";

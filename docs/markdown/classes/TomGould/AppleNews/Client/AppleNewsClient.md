@@ -555,6 +555,6 @@ private handleErrorResponse(string $body, int $statusCode): never
 
 **Throws:**
 
-- [`\TomGould\AppleNews\Exception\AuthenticationException|\TomGould\AppleNews\Exception\AppleNewsException`](../Exception/AuthenticationException|/TomGould/AppleNews/Exception/AppleNewsException.md)
+- [`\TomGould\AppleNews\Exception\AuthenticationException|\TomGould\AppleNews\Exception\AppleNewsException`](../Exception/AuthenticationException|/TomGould/AppleNews/Exception/AppleNewsException)
 
 ***
