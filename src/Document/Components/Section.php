@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace TomGould\AppleNews\Document\Components;
 
+use TomGould\AppleNews\Document\Scenes\SceneInterface;
+
 /**
  * Section container component.
  *
@@ -30,7 +32,7 @@ class Section extends Container
     }
 
     /**
-     * Set the scene for animated header effects.
+     * Set the scene for animated header effects using an array.
      *
      * @param array<string, mixed> $scene The scene configuration.
      *
@@ -39,6 +41,25 @@ class Section extends Container
     public function setScene(array $scene): self
     {
         $this->scene = $scene;
+        return $this;
+    }
+
+    /**
+     * Set the scene for animated header effects using a typed Scene object.
+     *
+     * This method provides type-safe scene configuration:
+     * ```php
+     * $section->setSceneObject(FadingStickyHeader::fadeToBlack());
+     * $section->setSceneObject(new ParallaxScaleHeader());
+     * ```
+     *
+     * @param SceneInterface $scene The scene object.
+     *
+     * @return $this
+     */
+    public function setSceneObject(SceneInterface $scene): self
+    {
+        $this->scene = $scene->jsonSerialize();
         return $this;
     }
 
@@ -58,4 +79,3 @@ class Section extends Container
         return $data;
     }
 }
-
