@@ -292,6 +292,7 @@ $article->addComponent(
 | Component | Role | Key Properties |
 |-----------|------|----------------|
 | `Title` | title | text |
+| `ArticleTitle` | article_title | text, enhanced formatting for feeds |
 | `Heading` | heading1-6 | text, level (1-6) |
 | `Body` | body | text, format (html/none) |
 | `Intro` | intro | text, drop cap support |
@@ -307,6 +308,7 @@ $article->addComponent(
 
 | Component | Factory Methods | Notes |
 |-----------|-----------------|-------|
+| `ArticleThumbnail` | `fromUrl()`, `fromBundle()` | Custom feed thumbnail |
 | `Photo` | `fromUrl()`, `fromBundle()` | Single image |
 | `Image` | `fromUrl()`, `fromBundle()` | Generic image (alias) |
 | `Figure` | `fromUrl()`, `fromBundle()` | Image with caption |
@@ -355,6 +357,39 @@ $article->addComponent(
 | `BannerAdvertisement` | - | Banner ad slot |
 | `MediumRectangleAdvertisement` | - | MREC ad slot (300x250) |
 | `ReplicaAdvertisement` | - | Print replica ad slot |
+
+### Feed Customization Components
+
+Control how your article appears in Apple News feeds:
+
+```php
+use TomGould\AppleNews\Document\Components\{ArticleThumbnail, ArticleTitle};
+
+// Custom thumbnail for feeds (different from article images)
+$thumbnail = ArticleThumbnail::fromBundle('feed-preview.jpg')
+    ->setCaption('Breaking news coverage')
+    ->setAccessibilityCaption('Reporter at press conference');
+
+$article->addComponent($thumbnail);
+
+// Enhanced title for feed display
+$articleTitle = new ArticleTitle('Major Policy Change Announced');
+$articleTitle->setTextStyle('feedTitleStyle');
+
+$article->addComponent($articleTitle);
+```
+
+**ArticleThumbnail properties:**
+- `URL` - Image source (bundle:// or https://)
+- `caption` - Visible caption text
+- `accessibilityCaption` - VoiceOver description
+- `explicitContent` - Content warning flag
+
+**ArticleTitle** extends TextComponent, supporting:
+- `textStyle` - Named style reference
+- `format` - html, markdown, or none
+- `inlineTextStyles` - Range-based styling
+- `additions` - Link ranges
 
 ---
 
