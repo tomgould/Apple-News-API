@@ -64,6 +64,7 @@ $article->setMetadata(
 
 ```php
 new Title('Title');
+new ArticleTitle('Feed Title');            // Enhanced feed title
 new Heading('Heading', level: 2);          // 1-6
 new Body('Text');
 (new Body('<p>HTML</p>'))->setFormat('html');
@@ -80,6 +81,9 @@ new Illustrator('Name');
 ### Media
 
 ```php
+ArticleThumbnail::fromBundle('feed.jpg');  // Custom feed thumbnail
+ArticleThumbnail::fromUrl('...')->setCaption('...')->setAccessibilityCaption('...');
+
 Photo::fromUrl('https://...');
 Photo::fromBundle('image.jpg');
 Photo::fromUrl('...')->setCaption('...')->setAccessibilityCaption('...');
