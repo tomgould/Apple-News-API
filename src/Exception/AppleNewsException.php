@@ -73,6 +73,9 @@ class AppleNewsException extends Exception
         $message = $firstError['message'] ?? $response['message'] ?? 'Unknown Apple News API error';
         $errorCode = $firstError['code'] ?? null;
         $keyPath = $firstError['keyPath'] ?? null;
+        if (is_array($keyPath)) {
+            $keyPath = implode('.', $keyPath);
+        }
 
         return new self($message, $httpCode, null, $errorCode, $keyPath);
     }

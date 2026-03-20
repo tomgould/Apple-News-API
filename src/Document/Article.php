@@ -39,6 +39,9 @@ final class Article implements JsonSerializable
     /** @var array<string, mixed> */
     private array $componentStyles = [];
 
+    /** @var array<string, mixed> */
+    private array $textStyles = [];
+
     private ?Metadata $metadata = null;
     private ?DocumentStyle $documentStyle = null;
 
@@ -137,6 +140,24 @@ final class Article implements JsonSerializable
     public function addComponentTextStyle(string $name, ComponentTextStyle $style): self
     {
         $this->componentTextStyles[$name] = $style;
+        return $this;
+    }
+
+    /**
+     * Define a reusable inline text style by name.
+     *
+     * Text styles are used by InlineTextStyle references and HTML/Markdown
+     * inline style attributes. They are stored in ArticleDocument.textStyles,
+     * which is separate from componentTextStyles.
+     *
+     * @param string $name Name of the style.
+     * @param array<string, mixed> $style Associative array of text style properties.
+     * @return self
+     * @see https://developer.apple.com/documentation/applenewsformat/textstyle
+     */
+    public function addTextStyle(string $name, array $style): self
+    {
+        $this->textStyles[$name] = $style;
         return $this;
     }
 
@@ -258,7 +279,7 @@ final class Article implements JsonSerializable
         }
 
         if (!empty($this->componentLayouts)) {
-            $data['componentLayouts'] = $this->componentLayouts;
+            $data['componentLayouts'] = self::convertEmptyArraysToObjects($this->componentLayouts);
         }
 
         if (!empty($this->componentTextStyles)) {
@@ -268,14 +289,40 @@ final class Article implements JsonSerializable
             );
         }
 
+        if (!empty($this->textStyles)) {
+            $data['textStyles'] = $this->textStyles;
+        }
+
         if (!empty($this->componentStyles)) {
-            $data['componentStyles'] = $this->componentStyles;
+            $data['componentStyles'] = self::convertEmptyArraysToObjects($this->componentStyles);
         }
 
         if (!empty($this->autoplacement)) {
             $data['autoplacement'] = $this->autoplacement;
         }
 
+        return $data;
+    }
+
+    /**
+     * Recursively convert empty arrays to stdClass for correct JSON serialization.
+     *
+     * PHP's json_encode serializes empty arrays as [] (JSON array), but the
+     * Apple News API expects {} (JSON object) for layout and style definitions.
+     * This method walks the data tree and converts empty arrays to stdClass
+     * objects so they serialize as {}.
+     *
+     * @param mixed $data The data to process.
+     * @return mixed The processed data with empty arrays replaced by stdClass.
+     */
+    private static function convertEmptyArraysToObjects(mixed $data): mixed
+    {
+        if (is_array($data)) {
+            if (empty($data)) {
+                return new \stdClass();
+            }
+            return array_map(self::convertEmptyArraysToObjects(...), $data);
+        }
         return $data;
     }
 }
