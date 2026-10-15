@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TomGould\AppleNews\Request;
 
+use TomGould\AppleNews\Enum\LiveCoverageState;
 use TomGould\AppleNews\Enum\MaturityRating;
 use JsonSerializable;
 
@@ -57,6 +58,11 @@ final class ArticleMetadata implements JsonSerializable
      * Content maturity rating for the article.
      */
     private ?MaturityRating $maturityRating = null;
+
+    /**
+     * Live coverage state for articles that contain a live_container.
+     */
+    private ?LiveCoverageState $liveCoverageState = null;
 
     /**
      * ISO 3166-1 alpha-2 country codes for content targeting.
@@ -150,6 +156,27 @@ final class ArticleMetadata implements JsonSerializable
     public function setMaturityRating(MaturityRating $maturityRating): self
     {
         $this->maturityRating = $maturityRating;
+        return $this;
+    }
+
+    /**
+     * Set the live coverage state.
+     *
+     * Use this with articles that contain a LiveContainer. LIVE is required
+     * for the LIVE badge to display. Apple only accepts the transitions
+     * NONE -> LIVE -> COMPLETED and rejects anything else. On Update Article
+     * requests the client adds the required revision alongside this value.
+     *
+     * Live Coverage is an invitation-only feature: Apple rejects live content
+     * from channels that have not been approved for it.
+     *
+     * @param LiveCoverageState $state The live coverage state.
+     *
+     * @return $this
+     */
+    public function setLiveCoverageState(LiveCoverageState $state): self
+    {
+        $this->liveCoverageState = $state;
         return $this;
     }
 
@@ -290,6 +317,10 @@ final class ArticleMetadata implements JsonSerializable
 
         if ($this->maturityRating !== null) {
             $data['maturityRating'] = $this->maturityRating->value;
+        }
+
+        if ($this->liveCoverageState !== null) {
+            $data['liveCoverageState'] = $this->liveCoverageState->value;
         }
 
         if (!empty($this->targetTerritoryCountryCodes)) {

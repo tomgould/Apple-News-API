@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TomGould\AppleNews\Tests\Request;
 
 use PHPUnit\Framework\TestCase;
+use TomGould\AppleNews\Enum\LiveCoverageState;
 use TomGould\AppleNews\Enum\MaturityRating;
 use TomGould\AppleNews\Request\ArticleMetadata;
 
@@ -59,6 +60,32 @@ final class ArticleMetadataTest extends TestCase
         $metadata = (new ArticleMetadata())->setMaturityRating(MaturityRating::MATURE);
 
         $this->assertSame(['maturityRating' => 'MATURE'], $metadata->toArray());
+    }
+
+    public function testSetLiveCoverageState(): void
+    {
+        $metadata = (new ArticleMetadata())->setLiveCoverageState(LiveCoverageState::LIVE);
+
+        $this->assertFalse($metadata->isEmpty());
+        $this->assertSame(['liveCoverageState' => 'LIVE'], $metadata->toArray());
+    }
+
+    public function testSetLiveCoverageStateReplacesPreviousValue(): void
+    {
+        $metadata = (new ArticleMetadata())
+            ->setLiveCoverageState(LiveCoverageState::LIVE)
+            ->setLiveCoverageState(LiveCoverageState::COMPLETED);
+
+        $this->assertSame(['liveCoverageState' => 'COMPLETED'], $metadata->toArray());
+    }
+
+    public function testLiveCoverageStateOmittedWhenNotSet(): void
+    {
+        $metadata = (new ArticleMetadata())
+            ->setIsSponsored(true)
+            ->setMaturityRating(MaturityRating::GENERAL);
+
+        $this->assertArrayNotHasKey('liveCoverageState', $metadata->toArray());
     }
 
     public function testAddTargetTerritory(): void
@@ -203,6 +230,7 @@ final class ArticleMetadataTest extends TestCase
             ->setIsCandidateToBeFeatured(true)
             ->setIsPreview(false)
             ->setMaturityRating(MaturityRating::GENERAL)
+            ->setLiveCoverageState(LiveCoverageState::LIVE)
             ->addTargetTerritories(['US', 'GB'])
             ->addSectionById('section-123');
 
@@ -211,6 +239,7 @@ final class ArticleMetadataTest extends TestCase
             'isCandidateToBeFeatured' => true,
             'isPreview' => false,
             'maturityRating' => 'GENERAL',
+            'liveCoverageState' => 'LIVE',
             'targetTerritoryCountryCodes' => ['US', 'GB'],
             'links' => [
                 'sections' => ['https://news-api.apple.com/sections/section-123'],
@@ -245,6 +274,7 @@ final class ArticleMetadataTest extends TestCase
             ->setIsPreview(false)
             ->setIsHidden(false)
             ->setMaturityRating(MaturityRating::GENERAL)
+            ->setLiveCoverageState(LiveCoverageState::NONE)
             ->addTargetTerritory('US')
             ->addTargetTerritories(['GB', 'CA'])
             ->setTargetTerritories(['AU'])
