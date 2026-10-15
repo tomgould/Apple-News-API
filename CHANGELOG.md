@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.0] - Unreleased
+
+### Added
+
+#### New Components (Live Coverage)
+- `LiveContainer` (`live_container`) - Holds the live posts of an Apple News Live Coverage article. Only accepts `LivePost` children
+- `LivePost` (`live_post`) - One live update. Holds any component except `LivePost` or `LiveContainer`
+- Both require a non-empty `identifier` constructor argument, and throw `InvalidArgumentException` for an empty identifier or a disallowed child
+
+#### API Enhancements
+- `LiveCoverageState` enum (`NONE`, `LIVE`, `COMPLETED`)
+- `ArticleMetadata::setLiveCoverageState()` sends `liveCoverageState` with Create and Update Article requests
+
+### Changed
+- Client tests now check the outgoing request body, including `liveCoverageState` sent next to the revision token on update
+
 ## [2.0.2] - 2026-03-20
 
 ### Changed

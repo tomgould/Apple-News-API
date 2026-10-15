@@ -227,6 +227,43 @@ $article
 | `Divider` | Visual separator |
 | `FlexibleSpacer` | Flexible spacing in horizontal stacks |
 
+#### Live Coverage
+
+Live Coverage is an invitation-only Apple News feature. Apple must approve your channel before it accepts articles with live content.
+
+| Component | Description |
+|-----------|-------------|
+| `LiveContainer` | Holds the live posts (`live_container`). One per article, and it only accepts `LivePost` children |
+| `LivePost` | One live update (`live_post`). Holds any components except `LivePost` and `LiveContainer` |
+
+```php
+use TomGould\AppleNews\Document\Components\{Body, LiveContainer, LivePost, Tweet};
+use TomGould\AppleNews\Enum\LiveCoverageState;
+use TomGould\AppleNews\Request\ArticleMetadata;
+
+// Both components require an identifier that is unique across the article.
+// Apple shows posts newest first, so add the newest post first.
+$live = (new LiveContainer('live-coverage'))
+    ->addComponent(
+        (new LivePost('post-2'))
+            ->addComponent(new Body('Updated at 14:05'))
+            ->addComponent(new Tweet('https://twitter.com/example/status/1234567890'))
+    )
+    ->addComponent(
+        (new LivePost('post-1'))
+            ->addComponent(new Body('Updated at 13:50'))
+            ->addComponent(new Body('Coverage is about to start.'))
+    );
+
+$article->addComponent($live);
+
+// LIVE is required for the LIVE badge. Apple only allows NONE -> LIVE -> COMPLETED.
+$metadata = (new ArticleMetadata())->setLiveCoverageState(LiveCoverageState::LIVE);
+$client->createArticle($channelId, $article, $metadata->toArray());
+```
+
+An empty identifier, a non-`LivePost` child in a `LiveContainer`, or a `LivePost`/`LiveContainer` inside a `LivePost` throws `InvalidArgumentException`.
+
 #### Data Components
 
 | Component | Description |
@@ -388,6 +425,7 @@ $client->promoteArticles($sectionId, ['article-id-1', 'article-id-2']);
 
 ```php
 use TomGould\AppleNews\Request\ArticleMetadata;
+use TomGould\AppleNews\Enum\LiveCoverageState;
 use TomGould\AppleNews\Enum\MaturityRating;
 
 // Create with metadata
@@ -407,6 +445,11 @@ $results = $client->searchArticlesInChannel($channelId, ['pageSize' => 20]);
 
 // Update (requires revision token)
 $client->updateArticle($articleId, $revision, $updatedArticle);
+
+// Live Coverage articles only: the client sends the revision alongside
+// liveCoverageState in the same metadata, e.g. to end the coverage
+$liveMetadata = (new ArticleMetadata())->setLiveCoverageState(LiveCoverageState::COMPLETED);
+$client->updateArticle($articleId, $revision, $liveArticle, $liveMetadata->toArray());
 
 // Delete
 $client->deleteArticle($articleId);
