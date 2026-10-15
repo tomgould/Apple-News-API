@@ -69,6 +69,9 @@ final class LivePost extends Container
     /**
      * Add a child component to this post.
      *
+     * Only direct children are checked: a LivePost inside a nested
+     * Container is not detected here.
+     *
      * @param Component $component Any component except LivePost or LiveContainer.
      *
      * @return self

@@ -18,9 +18,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `LiveCoverageState` enum (`NONE`, `LIVE`, `COMPLETED`)
 - `ArticleMetadata::setLiveCoverageState()` sends `liveCoverageState` with Create and Update Article requests
 
-### Changed
-- Client tests now check the outgoing request body, including `liveCoverageState` sent next to the revision token on update
-
 ## [2.0.2] - 2026-03-20
 
 ### Changed

@@ -262,7 +262,7 @@ $metadata = (new ArticleMetadata())->setLiveCoverageState(LiveCoverageState::LIV
 $client->createArticle($channelId, $article, $metadata->toArray());
 ```
 
-An empty identifier, a non-`LivePost` child in a `LiveContainer`, or a `LivePost`/`LiveContainer` inside a `LivePost` throws `InvalidArgumentException`.
+An empty identifier, a non-`LivePost` child in a `LiveContainer`, or a `LivePost`/`LiveContainer` added directly to a `LivePost` throws `InvalidArgumentException`. The library does not check the one-`LiveContainer`-per-article rule or the `NONE -> LIVE -> COMPLETED` order; Apple's API rejects those with `BAD_REQUEST`.
 
 #### Data Components
 
