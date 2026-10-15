@@ -184,4 +184,19 @@ final class ContainerComponentsTest extends TestCase
 
         $this->assertSame('horizontal', $data['contentDisplay']);
     }
+
+    public function testGetComponentsAndStyle(): void
+    {
+        $section = new Section();
+        $this->assertSame([], $section->getComponents());
+        $this->assertNull($section->getStyle());
+
+        $title = new Title('Title');
+        $body = new Body('Body');
+        $section->addComponent($title)->addComponent($body);
+        $section->setStyle('boxStyle');
+
+        $this->assertSame([$title, $body], $section->getComponents());
+        $this->assertSame('boxStyle', $section->getStyle());
+    }
 }

@@ -39,6 +39,16 @@ class Container extends Component
     }
 
     /**
+     * Get the child components, in the order they were added.
+     *
+     * @return list<Component>
+     */
+    public function getComponents(): array
+    {
+        return array_values($this->components);
+    }
+
+    /**
      * Set the content display mode using a string or array.
      *
      * @param string|array<string, mixed> $contentDisplay The display mode or configuration.

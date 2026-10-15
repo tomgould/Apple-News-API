@@ -89,6 +89,16 @@ abstract class Component implements JsonSerializable
     }
 
     /**
+     * Get the component style name.
+     *
+     * @return string|null The name set with setStyle(), or null.
+     */
+    public function getStyle(): ?string
+    {
+        return $this->style;
+    }
+
+    /**
      * Set the anchor configuration.
      *
      * @param string $anchor The anchor configuration.

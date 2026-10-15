@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - `ComponentTextStyle::setConditional()` and `addConditional()` - conditional variants of a component text style (for example a dark mode text color), serialized as `conditional`. Entries are `ConditionalComponentTextStyle` / `ConditionalTextStyle` objects or arrays
 - `TextComponent::getTextStyle()` returns the text style name set on a text component
+- `Component::getStyle()` returns the component style name, and `Container::getComponents()` the child components
 
 ## [2.1.0] - 2026-10-15
 

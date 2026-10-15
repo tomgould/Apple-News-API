@@ -261,7 +261,8 @@ final class ComponentTextStyle implements JsonSerializable
      *
      * Each entry changes some properties when its conditions are met, for
      * example a lighter text color in dark mode. An entry is a
-     * ConditionalComponentTextStyle or an array with a 'conditions' key.
+     * ConditionalTextStyle (including its ConditionalComponentTextStyle
+     * subclass) or an array with a 'conditions' key.
      *
      * @param array<ConditionalTextStyle|array<string, mixed>> $conditional
      * @return self
