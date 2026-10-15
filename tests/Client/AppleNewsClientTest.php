@@ -7,8 +7,13 @@ namespace TomGould\AppleNews\Tests\Client;
 use TomGould\AppleNews\Client\AppleNewsClient;
 use TomGould\AppleNews\Client\Authenticator;
 use TomGould\AppleNews\Document\Article;
+use TomGould\AppleNews\Document\Components\Body;
+use TomGould\AppleNews\Document\Components\LiveContainer;
+use TomGould\AppleNews\Document\Components\LivePost;
+use TomGould\AppleNews\Enum\LiveCoverageState;
 use TomGould\AppleNews\Exception\AppleNewsException;
 use TomGould\AppleNews\Exception\AuthenticationException;
+use TomGould\AppleNews\Request\ArticleMetadata;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
@@ -282,6 +287,90 @@ final class AppleNewsClientTest extends TestCase
         $result = $client->updateArticle('article-123', 'rev-001', $article);
 
         $this->assertEquals('rev-002', $result['data']['revision']);
+    }
+
+    /**
+     * Capture the multipart body handed to the stream factory.
+     *
+     * @param string|null $capturedBody Receives the outgoing request body.
+     */
+    private function captureRequestBody(?string &$capturedBody): void
+    {
+        $this->streamFactory->method('createStream')
+            ->willReturnCallback(function (string $body) use (&$capturedBody): StreamInterface {
+                $capturedBody = $body;
+                return $this->stream;
+            });
+    }
+
+    private function createLiveCoverageArticle(): Article
+    {
+        return Article::create('test-id', 'Live Coverage', 'en')
+            ->addComponent(
+                (new LiveContainer('live-coverage'))
+                    ->addComponent((new LivePost('post-1'))->addComponent(new Body('First update')))
+            );
+    }
+
+    public function testCreateArticleSendsLiveCoverageState(): void
+    {
+        $capturedBody = null;
+        $this->captureRequestBody($capturedBody);
+        $this->mockSuccessResponse([
+            'data' => ['id' => 'article-123', 'revision' => 'rev-001'],
+        ]);
+
+        $metadata = (new ArticleMetadata())->setLiveCoverageState(LiveCoverageState::LIVE);
+
+        $client = $this->createClient();
+        $client->createArticle('channel-123', $this->createLiveCoverageArticle(), $metadata->toArray());
+
+        $this->assertIsString($capturedBody);
+        $this->assertStringContainsString('{"data":{"liveCoverageState":"LIVE"}}', $capturedBody);
+        $this->assertStringContainsString('"role": "live_container"', $capturedBody);
+        $this->assertStringContainsString('"role": "live_post"', $capturedBody);
+    }
+
+    public function testUpdateArticleSendsLiveCoverageStateAlongsideRevision(): void
+    {
+        $capturedBody = null;
+        $this->captureRequestBody($capturedBody);
+        $this->mockSuccessResponse([
+            'data' => ['id' => 'article-123', 'revision' => 'rev-003'],
+        ]);
+
+        $metadata = (new ArticleMetadata())->setLiveCoverageState(LiveCoverageState::COMPLETED);
+
+        $client = $this->createClient();
+        $client->updateArticle(
+            'article-123',
+            'rev-002',
+            $this->createLiveCoverageArticle(),
+            $metadata->toArray()
+        );
+
+        // Both keys must land in the same "data" object, as in Apple's spec example.
+        $this->assertIsString($capturedBody);
+        $this->assertStringContainsString(
+            '{"data":{"liveCoverageState":"COMPLETED","revision":"rev-002"}}',
+            $capturedBody
+        );
+    }
+
+    public function testUpdateArticleWithoutMetadataSendsOnlyRevision(): void
+    {
+        $capturedBody = null;
+        $this->captureRequestBody($capturedBody);
+        $this->mockSuccessResponse([
+            'data' => ['id' => 'article-123', 'revision' => 'rev-002'],
+        ]);
+
+        $client = $this->createClient();
+        $client->updateArticle('article-123', 'rev-001', Article::create('test-id', 'Updated Title', 'en'));
+
+        $this->assertIsString($capturedBody);
+        $this->assertStringContainsString('{"data":{"revision":"rev-001"}}', $capturedBody);
+        $this->assertStringNotContainsString('liveCoverageState', $capturedBody);
     }
 
     public function testDeleteArticle(): void
