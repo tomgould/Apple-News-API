@@ -342,6 +342,7 @@ $header->setScene(ParallaxScaleHeader::create());
 
 ```php
 use TomGould\AppleNews\Document\Layouts\Condition;
+use TomGould\AppleNews\Document\Styles\ComponentTextStyle;
 use TomGould\AppleNews\Document\Conditionals\{
     ConditionalComponentStyle,
     ConditionalTextStyle,
@@ -350,6 +351,11 @@ use TomGould\AppleNews\Document\Conditionals\{
 
 // Dark mode styling
 $darkStyle = ConditionalComponentStyle::darkMode('#1C1C1E');
+
+// Dark mode text color for a component text style
+$bodyStyle = (new ComponentTextStyle())
+    ->setTextColor('#222222')
+    ->addConditional(ConditionalTextStyle::darkMode('#FFFFFF'));
 
 // Compact width layout
 $compactLayout = ConditionalComponentLayout::fullWidthOnCompact();
