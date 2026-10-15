@@ -11,14 +11,9 @@ use InvalidArgumentException;
  *
  * The live_container component holds the live_post updates of a Live
  * Coverage article and displays them in real time. It may only contain
- * LivePost components, and Apple requires a unique identifier on it.
+ * LivePost components and needs an identifier unique within the article.
  *
- * Apple also allows at most one live_container per article. This class has
- * no reference to the containing Article, so that rule is the caller's
- * responsibility (the API rejects a second one with BAD_REQUEST).
- *
- * Live Coverage is an invitation-only Apple News feature: the channel must be
- * approved by Apple, and the article should be published with
+ * Apple must enable Live Coverage for the channel. Publish the article with
  * ArticleMetadata::setLiveCoverageState(LiveCoverageState::LIVE).
  *
  * Usage:

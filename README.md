@@ -229,11 +229,11 @@ $article
 
 #### Live Coverage
 
-Live Coverage is an invitation-only Apple News feature. Apple must approve your channel before it accepts articles with live content.
+Apple must enable Live Coverage for your channel before it accepts articles with live content.
 
 | Component | Description |
 |-----------|-------------|
-| `LiveContainer` | Holds the live posts (`live_container`). One per article, and it only accepts `LivePost` children |
+| `LiveContainer` | Holds the live posts (`live_container`). Only accepts `LivePost` children |
 | `LivePost` | One live update (`live_post`). Holds any components except `LivePost` and `LiveContainer` |
 
 ```php
@@ -242,7 +242,7 @@ use TomGould\AppleNews\Enum\LiveCoverageState;
 use TomGould\AppleNews\Request\ArticleMetadata;
 
 // Both components require an identifier that is unique across the article.
-// Apple shows posts newest first, so add the newest post first.
+// Add the newest post first.
 $live = (new LiveContainer('live-coverage'))
     ->addComponent(
         (new LivePost('post-2'))
@@ -257,12 +257,12 @@ $live = (new LiveContainer('live-coverage'))
 
 $article->addComponent($live);
 
-// LIVE is required for the LIVE badge. Apple only allows NONE -> LIVE -> COMPLETED.
+// Mark the article as live coverage.
 $metadata = (new ArticleMetadata())->setLiveCoverageState(LiveCoverageState::LIVE);
 $client->createArticle($channelId, $article, $metadata->toArray());
 ```
 
-An empty identifier, a non-`LivePost` child in a `LiveContainer`, or a `LivePost`/`LiveContainer` added directly to a `LivePost` throws `InvalidArgumentException`. The library does not check the one-`LiveContainer`-per-article rule or the `NONE -> LIVE -> COMPLETED` order; Apple's API rejects those with `BAD_REQUEST`.
+An empty identifier, a non-`LivePost` child in a `LiveContainer`, or a `LivePost`/`LiveContainer` added directly to a `LivePost` throws `InvalidArgumentException`. Anything else about live articles is checked by Apple's API.
 
 #### Data Components
 

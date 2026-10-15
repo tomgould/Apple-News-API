@@ -11,8 +11,8 @@ use InvalidArgumentException;
  *
  * The live_post component represents one update inside a LiveContainer. It
  * can hold any other component (text, photos, embeds, etc.) but not another
- * LivePost or a LiveContainer. Apple requires a unique identifier on each
- * post, and recommends starting each post with a timestamp.
+ * LivePost or a LiveContainer. Each post needs an identifier unique within
+ * the article.
  *
  * Usage:
  * ```php
