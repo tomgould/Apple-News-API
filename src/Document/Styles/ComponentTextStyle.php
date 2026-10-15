@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TomGould\AppleNews\Document\Styles;
 
 use JsonSerializable;
+use TomGould\AppleNews\Document\Conditionals\ConditionalTextStyle;
 
 /**
  * Detailed text styling options for components.
@@ -42,6 +43,9 @@ final class ComponentTextStyle implements JsonSerializable
     private ?int $paragraphSpacingAfter = null;
     private ?int $firstLineIndent = null;
     private ?int $hangingPunctuation = null;
+
+    /** @var list<ConditionalTextStyle|array<string, mixed>>|null */
+    private ?array $conditional = null;
 
     /**
      * Set the font family name.
@@ -253,6 +257,37 @@ final class ComponentTextStyle implements JsonSerializable
     }
 
     /**
+     * Set the conditional variants of this style, replacing any set before.
+     *
+     * Each entry changes some properties when its conditions are met, for
+     * example a lighter text color in dark mode. An entry is a
+     * ConditionalComponentTextStyle or an array with a 'conditions' key.
+     *
+     * @param array<ConditionalTextStyle|array<string, mixed>> $conditional
+     * @return self
+     * @see https://developer.apple.com/documentation/applenewsformat/conditionalcomponenttextstyle
+     */
+    public function setConditional(array $conditional): self
+    {
+        $this->conditional = array_values($conditional);
+        return $this;
+    }
+
+    /**
+     * Add one conditional variant of this style.
+     *
+     * @param ConditionalTextStyle|array<string, mixed> $conditional
+     * @return self
+     * @see setConditional()
+     */
+    public function addConditional(ConditionalTextStyle|array $conditional): self
+    {
+        $this->conditional ??= [];
+        $this->conditional[] = $conditional;
+        return $this;
+    }
+
+    /**
      * @return array<string, mixed>
      */
     public function jsonSerialize(): array
@@ -333,6 +368,13 @@ final class ComponentTextStyle implements JsonSerializable
 
         if ($this->hangingPunctuation !== null) {
             $data['hangingPunctuation'] = $this->hangingPunctuation;
+        }
+
+        if (!empty($this->conditional)) {
+            $data['conditional'] = array_map(
+                fn(ConditionalTextStyle|array $c) => $c instanceof ConditionalTextStyle ? $c->jsonSerialize() : $c,
+                $this->conditional
+            );
         }
 
         return $data;

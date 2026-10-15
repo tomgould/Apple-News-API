@@ -115,4 +115,13 @@ final class TextComponentsTest extends TestCase
         $this->assertSame('authorStyle', $data['style']);
         $this->assertArrayNotHasKey('hidden', $data);
     }
+
+    public function testGetTextStyle(): void
+    {
+        $intro = new Intro('Text');
+        $this->assertNull($intro->getTextStyle());
+
+        $intro->setTextStyle('introStyle');
+        $this->assertSame('introStyle', $intro->getTextStyle());
+    }
 }

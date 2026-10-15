@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace TomGould\AppleNews\Tests\Document;
 
+use TomGould\AppleNews\Document\Article;
+use TomGould\AppleNews\Document\Conditionals\ConditionalComponentTextStyle;
+use TomGould\AppleNews\Document\Layouts\Condition;
 use TomGould\AppleNews\Document\Styles\ComponentTextStyle;
 use TomGould\AppleNews\Document\Styles\DocumentStyle;
 use PHPUnit\Framework\TestCase;
@@ -227,5 +230,101 @@ final class StylesTest extends TestCase
         $this->assertTrue($data['hyphenation']);
         $this->assertEquals(12, $data['paragraphSpacingAfter']);
     }
-}
 
+    // ==========================================
+    // ComponentTextStyle conditional Tests
+    // ==========================================
+
+    public function testComponentTextStyleHasNoConditionalByDefault(): void
+    {
+        $data = (new ComponentTextStyle())->setTextColor('#222222')->jsonSerialize();
+
+        $this->assertSame(['textColor' => '#222222'], $data);
+    }
+
+    public function testComponentTextStyleConditionalFromArray(): void
+    {
+        $style = (new ComponentTextStyle())
+            ->setTextColor('#222222')
+            ->setConditional([
+                ['conditions' => ['preferredColorScheme' => 'dark'], 'textColor' => '#FFFFFF'],
+            ]);
+
+        $this->assertSame([
+            'textColor' => '#222222',
+            'conditional' => [
+                ['conditions' => ['preferredColorScheme' => 'dark'], 'textColor' => '#FFFFFF'],
+            ],
+        ], $style->jsonSerialize());
+    }
+
+    public function testComponentTextStyleConditionalFromObject(): void
+    {
+        $dark = (new ConditionalComponentTextStyle())
+            ->addCondition(Condition::darkMode())
+            ->setTextColor('#FFFFFF');
+
+        $data = (new ComponentTextStyle())->addConditional($dark)->jsonSerialize();
+
+        $this->assertSame([
+            ['conditions' => [['preferredColorScheme' => 'dark']], 'textColor' => '#FFFFFF'],
+        ], $data['conditional']);
+    }
+
+    public function testComponentTextStyleAddConditionalAppends(): void
+    {
+        $style = (new ComponentTextStyle())
+            ->addConditional(['conditions' => ['preferredColorScheme' => 'dark'], 'textColor' => '#FFFFFF'])
+            ->addConditional(['conditions' => ['horizontalSizeClass' => 'compact'], 'fontSize' => 14]);
+
+        $data = $style->jsonSerialize();
+
+        $this->assertCount(2, $data['conditional']);
+        $this->assertSame(14, $data['conditional'][1]['fontSize']);
+    }
+
+    public function testComponentTextStyleSetConditionalReplaces(): void
+    {
+        $style = (new ComponentTextStyle())
+            ->addConditional(['conditions' => ['preferredColorScheme' => 'light'], 'textColor' => '#000000'])
+            ->setConditional(['dark' => ['conditions' => ['preferredColorScheme' => 'dark'], 'textColor' => '#FFFFFF']]);
+
+        $data = $style->jsonSerialize();
+
+        // Keys are dropped so the JSON is an array, not an object.
+        $this->assertSame([['conditions' => ['preferredColorScheme' => 'dark'], 'textColor' => '#FFFFFF']], $data['conditional']);
+    }
+
+    public function testComponentTextStyleEmptyConditionalIsLeftOut(): void
+    {
+        $data = (new ComponentTextStyle())->setFontSize(12)->setConditional([])->jsonSerialize();
+
+        $this->assertArrayNotHasKey('conditional', $data);
+    }
+
+    public function testComponentTextStyleConditionalIsLastKey(): void
+    {
+        $data = (new ComponentTextStyle())
+            ->setConditional([['conditions' => ['preferredColorScheme' => 'dark'], 'textColor' => '#FFFFFF']])
+            ->setFontName('Georgia')
+            ->setHangingPunctuation(1)
+            ->jsonSerialize();
+
+        $this->assertSame(['fontName', 'hangingPunctuation', 'conditional'], array_keys($data));
+    }
+
+    public function testComponentTextStyleConditionalInArticleJson(): void
+    {
+        $article = Article::create('id', 'Title', 'en');
+        $article->addComponentTextStyle('body', (new ComponentTextStyle())
+            ->setTextColor('#222222')
+            ->addConditional(['conditions' => ['preferredColorScheme' => 'dark'], 'textColor' => '#FFFFFF']));
+
+        $json = json_decode($article->toJson(), true);
+
+        $this->assertSame(
+            [['conditions' => ['preferredColorScheme' => 'dark'], 'textColor' => '#FFFFFF']],
+            $json['componentTextStyles']['body']['conditional']
+        );
+    }
+}

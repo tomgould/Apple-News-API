@@ -43,6 +43,15 @@ abstract class TextComponent extends Component
     }
 
     /**
+     * Get the text style name.
+     * @return string|null The name set with setTextStyle(), or null.
+     */
+    public function getTextStyle(): ?string
+    {
+        return $this->textStyle;
+    }
+
+    /**
      * Define specific styles for ranges of text within this component.
      * @param array<array<string, mixed>> $styles
      * @return static
