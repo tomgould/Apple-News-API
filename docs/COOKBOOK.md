@@ -907,7 +907,7 @@ function validateArticle(Article $article): array
 
 ## Common Pitfalls
 
-### ❌ Invalid Identifier
+### Invalid Identifier
 
 ```php
 // WRONG
@@ -917,7 +917,7 @@ Article::create('My Article #1', 'Title');
 Article::create('my-article-1', 'Title');
 ```
 
-### ❌ Missing Revision on Update
+### Missing Revision on Update
 
 ```php
 // WRONG
@@ -928,7 +928,7 @@ $current = $client->getArticle($articleId);
 $client->updateArticle($articleId, $current['data']['revision'], $article);
 ```
 
-### ❌ HTML Without Format
+### HTML Without Format
 
 ```php
 // WRONG - renders as literal text
@@ -938,7 +938,7 @@ $body = new Body('<p><strong>Bold</strong></p>');
 $body = (new Body('<p><strong>Bold</strong></p>'))->setFormat('html');
 ```
 
-### ❌ Local Path as URL
+### Local Path as URL
 
 ```php
 // WRONG
@@ -949,7 +949,7 @@ Photo::fromBundle('hero.jpg');
 // + provide mapping: ['bundle://hero.jpg' => '/var/www/images/hero.jpg']
 ```
 
-### ❌ Missing Accessibility
+### Missing Accessibility
 
 ```php
 // WRONG

@@ -10,13 +10,13 @@ A modern, PSR-compliant PHP library for the Apple News Publisher API with full A
 
 ## Features
 
-- 🚀 **Modern PHP 8.1+** with strict types and named arguments
-- 🔌 **PSR-18 HTTP Client** compatible (works with Guzzle, Symfony, etc.)
-- 📝 **Full Apple News Format** support with a fluent, object-oriented document builder
-- 🎨 **Complete ANF Coverage** — 45+ components, animations, behaviors, scenes, and conditional styles
-- 🔐 **HMAC-SHA256 Authentication** handled automatically
-- 📦 **Zero Framework Dependencies** — use with any framework or standalone
-- ✅ **Thoroughly Tested** — 99.9%+ code coverage
+- **Modern PHP 8.1+** with strict types and named arguments
+- **PSR-18 HTTP Client** compatible (works with Guzzle, Symfony, etc.)
+- **Full Apple News Format** support with a fluent, object-oriented document builder
+- **Complete ANF Coverage**: 45+ components, animations, behaviors, scenes, and conditional styles
+- **HMAC-SHA256 Authentication** handled automatically
+- **Zero Framework Dependencies**: use with any framework or standalone
+- **Thoroughly Tested**: 99.9%+ code coverage
 
 ## Requirements
 

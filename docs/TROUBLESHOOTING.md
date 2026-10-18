@@ -39,11 +39,11 @@ try {
 ### `INVALID_DOCUMENT: Invalid identifier`
 
 ```php
-// ❌ WRONG
+// WRONG
 Article::create('My Article #1', 'Title');
 Article::create('article/2024', 'Title');
 
-// ✅ CORRECT (URL-safe only)
+// CORRECT (URL-safe only)
 Article::create('my-article-1', 'Title');
 Article::create('article_2024_01', 'Title');
 ```
@@ -51,31 +51,31 @@ Article::create('article_2024_01', 'Title');
 ### `INVALID_DOCUMENT: components[X] missing required field`
 
 ```php
-// ❌ Photo without URL
+// Wrong: Photo without URL
 $photo = new Photo();
 
-// ✅ Correct
+// Right: Correct
 $photo = Photo::fromUrl('https://example.com/image.jpg');
 ```
 
 ### `INVALID_DOCUMENT: Invalid text format`
 
 ```php
-// ❌ HTML without format
+// Wrong: HTML without format
 $body = new Body('<p><strong>Bold</strong></p>');
 
-// ✅ Specify HTML format
+// Right: Specify HTML format
 $body = (new Body('<p><strong>Bold</strong></p>'))->setFormat('html');
 ```
 
 ### `INVALID_DOCUMENT: Invalid color value`
 
 ```php
-// ❌ Invalid
+// Wrong: Invalid
 'rgb(255, 0, 0)'    // Not supported
 'red'                // Named colors not supported
 
-// ✅ Valid
+// Right: Valid
 '#FF0000'            // 6-digit hex
 '#F00'               // 3-digit hex
 '#FF000080'          // 8-digit hex with alpha
@@ -84,11 +84,11 @@ $body = (new Body('<p><strong>Bold</strong></p>'))->setFormat('html');
 ### `INVALID_DOCUMENT: Invalid URL`
 
 ```php
-// ❌ Invalid
+// Wrong: Invalid
 Photo::fromUrl('/local/path');
 Photo::fromUrl('file:///path');
 
-// ✅ Valid
+// Right: Valid
 Photo::fromUrl('https://example.com/image.jpg');
 Photo::fromBundle('image.jpg');  // For local files
 ```
@@ -100,13 +100,13 @@ Photo::fromBundle('image.jpg');  // For local files
 ### `Asset not found: bundle://...`
 
 ```php
-// ❌ Key mismatch
+// Wrong: Key mismatch
 $article->addComponent(Photo::fromBundle('hero.jpg'));
 $client->createArticle($channelId, $article, null, [
     'bundle://image.jpg' => '/path/to/hero.jpg'  // Wrong key!
 ]);
 
-// ✅ Keys must match exactly
+// Right: Keys must match exactly
 $client->createArticle($channelId, $article, null, [
     'bundle://hero.jpg' => '/path/to/hero.jpg'   // Correct
 ]);
@@ -131,10 +131,10 @@ curl -I https://example.com/image.jpg
 ### `CONFLICT: Revision mismatch`
 
 ```php
-// ❌ Using stale revision
+// Wrong: Using stale revision
 $client->updateArticle($articleId, $oldRevision, $article);
 
-// ✅ Always get fresh revision
+// Right: Always get fresh revision
 $current = $client->getArticle($articleId);
 $freshRevision = $current['data']['revision'];
 $client->updateArticle($articleId, $freshRevision, $article);
@@ -161,10 +161,10 @@ function articleExists(AppleNewsClient $client, string $articleId): bool
 ### Components Not Appearing
 
 ```php
-// ❌ Empty body is ignored
+// Wrong: Empty body is ignored
 $article->addComponent(new Body(''));
 
-// ✅ Only add non-empty content
+// Right: Only add non-empty content
 if (!empty(trim($text))) {
     $article->addComponent(new Body($text));
 }
@@ -173,20 +173,20 @@ if (!empty(trim($text))) {
 ### Layout Shifts
 
 ```php
-// ❌ No dimensions
+// Wrong: No dimensions
 $photo = Photo::fromUrl('https://...');
 
-// ✅ Provide dimension hints
+// Right: Provide dimension hints
 $photo->setLayout(['minimumHeight' => '300pt']);
 ```
 
 ### Styles Not Applied
 
 ```php
-// ❌ Using unregistered style
+// Wrong: Using unregistered style
 $body->setTextStyle('myStyle');
 
-// ✅ Register first
+// Right: Register first
 $article->addComponentTextStyle('myStyle', $styleObject);
 $body->setTextStyle('myStyle');
 ```
@@ -194,10 +194,10 @@ $body->setTextStyle('myStyle');
 ### Dark Mode Not Working
 
 ```php
-// ❌ Wrong format
+// Wrong: Wrong format
 $style->setConditional(['darkMode' => true, 'textColor' => '#FFF']);
 
-// ✅ Correct format
+// Right: Correct format
 $style->setConditional([[
     'conditions' => [['preferredColorScheme' => 'dark']],
     'textColor' => '#FFFFFF'
