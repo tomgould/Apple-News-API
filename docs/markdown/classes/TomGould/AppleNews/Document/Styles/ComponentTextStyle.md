@@ -169,6 +169,14 @@ private ?int $hangingPunctuation
 
 ***
 
+### conditional
+
+```php
+private list<\TomGould\AppleNews\Document\Conditionals\ConditionalTextStyle|array<string,mixed>>|null $conditional
+```
+
+***
+
 ## Methods
 
 ### setFontName
@@ -472,6 +480,51 @@ public setHangingPunctuation(int $value): self
 | Parameter | Type    | Description |
 |-----------|---------|-------------|
 | `$value`  | **int** |             |
+
+***
+
+### setConditional
+
+Set the conditional variants of this style, replacing any set before.
+
+```php
+public setConditional((\TomGould\AppleNews\Document\Conditionals\ConditionalTextStyle|array<string,mixed>)[] $conditional): self
+```
+
+Each entry changes some properties when its conditions are met, for
+example a lighter text color in dark mode. An entry is a
+ConditionalTextStyle (including its ConditionalComponentTextStyle
+subclass) or an array with a 'conditions' key.
+
+**Parameters:**
+
+| Parameter      | Type                                                                                        | Description |
+|----------------|---------------------------------------------------------------------------------------------|-------------|
+| `$conditional` | **(\TomGould\AppleNews\Document\Conditionals\ConditionalTextStyle\|array<string,mixed>)[]** |             |
+
+**See Also:**
+
+* https://developer.apple.com/documentation/applenewsformat/conditionalcomponenttextstyle
+
+***
+
+### addConditional
+
+Add one conditional variant of this style.
+
+```php
+public addConditional(\TomGould\AppleNews\Document\Conditionals\ConditionalTextStyle|array<string,mixed> $conditional): self
+```
+
+**Parameters:**
+
+| Parameter      | Type                                                                                    | Description |
+|----------------|-----------------------------------------------------------------------------------------|-------------|
+| `$conditional` | **\TomGould\AppleNews\Document\Conditionals\ConditionalTextStyle\|array<string,mixed>** |             |
+
+**See Also:**
+
+* \TomGould\AppleNews\Document\Styles\setConditional()
 
 ***
 

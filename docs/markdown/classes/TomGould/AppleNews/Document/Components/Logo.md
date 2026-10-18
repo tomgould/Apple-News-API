@@ -36,6 +36,16 @@ private ?string $accessibilityCaption
 
 ***
 
+### explicitContent
+
+Whether the image contains explicit content.
+
+```php
+private ?bool $explicitContent
+```
+
+***
+
 ### url
 
 ```php
@@ -146,6 +156,22 @@ public setAccessibilityCaption(string $caption): $this
 
 ***
 
+### setExplicitContent
+
+Set whether the image contains explicit content.
+
+```php
+public setExplicitContent(bool $explicit): $this
+```
+
+**Parameters:**
+
+| Parameter   | Type     | Description                      |
+|-------------|----------|----------------------------------|
+| `$explicit` | **bool** | Whether the content is explicit. |
+
+***
+
 ### jsonSerialize
 
 Implementation of JsonSerializable.
@@ -214,6 +240,20 @@ public setStyle(string $style): static
 | Parameter | Type       | Description                             |
 |-----------|------------|-----------------------------------------|
 | `$style`  | **string** | Reference to a name in componentStyles. |
+
+***
+
+### getStyle
+
+Get the component style name.
+
+```php
+public getStyle(): string|null
+```
+
+**Return Value:**
+
+The name set with setStyle(), or null.
 
 ***
 

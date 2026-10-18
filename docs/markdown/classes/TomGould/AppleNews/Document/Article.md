@@ -57,6 +57,14 @@ private array<string,mixed> $componentStyles
 
 ***
 
+### textStyles
+
+```php
+private array<string,mixed> $textStyles
+```
+
+***
+
 ### metadata
 
 ```php
@@ -236,6 +244,31 @@ public addComponentTextStyle(string $name, \TomGould\AppleNews\Document\Styles\C
 
 ***
 
+### addTextStyle
+
+Define a reusable inline text style by name.
+
+```php
+public addTextStyle(string $name, array<string,mixed> $style): self
+```
+
+Text styles are used by InlineTextStyle references and HTML/Markdown
+inline style attributes. They are stored in ArticleDocument.textStyles,
+which is separate from componentTextStyles.
+
+**Parameters:**
+
+| Parameter | Type                    | Description                                 |
+|-----------|-------------------------|---------------------------------------------|
+| `$name`   | **string**              | Name of the style.                          |
+| `$style`  | **array<string,mixed>** | Associative array of text style properties. |
+
+**See Also:**
+
+* https://developer.apple.com/documentation/applenewsformat/textstyle
+
+***
+
 ### addComponentStyle
 
 Define a reusable component style (borders, fills, etc.) by name.
@@ -367,5 +400,31 @@ Required for JsonSerializable implementation.
 ```php
 public jsonSerialize(): array<string,mixed>
 ```
+
+***
+
+### convertEmptyArraysToObjects
+
+Recursively convert empty arrays to stdClass for correct JSON serialization.
+
+```php
+private static convertEmptyArraysToObjects(mixed $data): mixed
+```
+
+PHP's json_encode serializes empty arrays as [] (JSON array), but the
+Apple News API expects } (JSON object) for layout and style definitions.
+This method walks the data tree and converts empty arrays to stdClass
+objects so they serialize as }.
+
+* This method is **static**.
+**Parameters:**
+
+| Parameter | Type      | Description          |
+|-----------|-----------|----------------------|
+| `$data`   | **mixed** | The data to process. |
+
+**Return Value:**
+
+The processed data with empty arrays replaced by stdClass.
 
 ***

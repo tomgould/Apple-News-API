@@ -81,6 +81,8 @@ This is an automatically generated documentation for **Apple News API PHP Client
 |-----------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------|
 | [`ARKit`](./classes/TomGould/AppleNews/Document/Components/ARKit.md)                                               | ARKit component for augmented reality experiences.                        |
 | [`ArticleLink`](./classes/TomGould/AppleNews/Document/Components/ArticleLink.md)                                   | Article link component.                                                   |
+| [`ArticleThumbnail`](./classes/TomGould/AppleNews/Document/Components/ArticleThumbnail.md)                         | Article thumbnail component for custom feed images.                       |
+| [`ArticleTitle`](./classes/TomGould/AppleNews/Document/Components/ArticleTitle.md)                                 | Article title component with enhanced formatting options.                 |
 | [`Aside`](./classes/TomGould/AppleNews/Document/Components/Aside.md)                                               | Aside container component.                                                |
 | [`Audio`](./classes/TomGould/AppleNews/Document/Components/Audio.md)                                               | Audio component for audio content playback.                               |
 | [`Author`](./classes/TomGould/AppleNews/Document/Components/Author.md)                                             | Author name component.                                                    |
@@ -106,6 +108,8 @@ This is an automatically generated documentation for **Apple News API PHP Client
 | [`Instagram`](./classes/TomGould/AppleNews/Document/Components/Instagram.md)                                       | Component for embedding Instagram posts.                                  |
 | [`Intro`](./classes/TomGould/AppleNews/Document/Components/Intro.md)                                               | Introductory or deck text component.                                      |
 | [`LinkButton`](./classes/TomGould/AppleNews/Document/Components/LinkButton.md)                                     | A call-to-action button that links to an external URL or article section. |
+| [`LiveContainer`](./classes/TomGould/AppleNews/Document/Components/LiveContainer.md)                               | Live Coverage container component.                                        |
+| [`LivePost`](./classes/TomGould/AppleNews/Document/Components/LivePost.md)                                         | Live Coverage post component.                                             |
 | [`Logo`](./classes/TomGould/AppleNews/Document/Components/Logo.md)                                                 | Logo component for brand or publication logos.                            |
 | [`Map`](./classes/TomGould/AppleNews/Document/Components/Map.md)                                                   | Map component for displaying Apple Maps.                                  |
 | [`MediumRectangleAdvertisement`](./classes/TomGould/AppleNews/Document/Components/MediumRectangleAdvertisement.md) | Medium rectangle advertisement component (MREC).                          |

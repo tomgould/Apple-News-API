@@ -88,6 +88,20 @@ public setStyle(string $style): static
 
 ***
 
+### getStyle
+
+Get the component style name.
+
+```php
+public getStyle(): string|null
+```
+
+**Return Value:**
+
+The name set with setStyle(), or null.
+
+***
+
 ### setAnchor
 
 Set the anchor configuration.
@@ -274,6 +288,20 @@ public setTextStyle(string $textStyle): static
 
 ***
 
+### getTextStyle
+
+Get the text style name.
+
+```php
+public getTextStyle(): string|null
+```
+
+**Return Value:**
+
+The name set with setTextStyle(), or null.
+
+***
+
 ### setInlineTextStyles
 
 Define specific styles for ranges of text within this component.
@@ -303,5 +331,28 @@ public setFormat(string $format): static
 | Parameter | Type       | Description |
 |-----------|------------|-------------|
 | `$format` | **string** |             |
+
+***
+
+### setAdditions
+
+Set additions (link ranges) for the text component.
+
+```php
+public setAdditions(array<string,mixed>[] $additions): static
+```
+
+Additions allow you to apply links to specific ranges of text.
+Note: Additions are not supported when format is 'html' or 'markdown'.
+
+**Parameters:**
+
+| Parameter    | Type                      | Description                                                       |
+|--------------|---------------------------|-------------------------------------------------------------------|
+| `$additions` | **array<string,mixed>[]** | Array of addition objects with rangeStart, rangeLength, and link. |
+
+**See Also:**
+
+* https://developer.apple.com/documentation/applenewsformat/addition
 
 ***

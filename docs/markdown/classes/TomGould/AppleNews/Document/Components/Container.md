@@ -59,6 +59,16 @@ public addComponent(\TomGould\AppleNews\Document\Components\Component $component
 
 ***
 
+### getComponents
+
+Get the child components, in the order they were added.
+
+```php
+public getComponents(): list<\TomGould\AppleNews\Document\Components\Component>
+```
+
+***
+
 ### setContentDisplay
 
 Set the content display mode using a string or array.
@@ -165,6 +175,20 @@ public setStyle(string $style): static
 | Parameter | Type       | Description                             |
 |-----------|------------|-----------------------------------------|
 | `$style`  | **string** | Reference to a name in componentStyles. |
+
+***
+
+### getStyle
+
+Get the component style name.
+
+```php
+public getStyle(): string|null
+```
+
+**Return Value:**
+
+The name set with setStyle(), or null.
 
 ***
 

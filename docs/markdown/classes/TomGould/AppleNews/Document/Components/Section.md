@@ -145,6 +145,20 @@ public setStyle(string $style): static
 
 ***
 
+### getStyle
+
+Get the component style name.
+
+```php
+public getStyle(): string|null
+```
+
+**Return Value:**
+
+The name set with setStyle(), or null.
+
+***
+
 ### setAnchor
 
 Set the anchor configuration.
@@ -314,6 +328,16 @@ public addComponent(\TomGould\AppleNews\Document\Components\Component $component
 | Parameter    | Type                                                  | Description |
 |--------------|-------------------------------------------------------|-------------|
 | `$component` | **\TomGould\AppleNews\Document\Components\Component** |             |
+
+***
+
+### getComponents
+
+Get the child components, in the order they were added.
+
+```php
+public getComponents(): list<\TomGould\AppleNews\Document\Components\Component>
+```
 
 ***
 

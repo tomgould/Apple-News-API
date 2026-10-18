@@ -84,6 +84,16 @@ private ?\TomGould\AppleNews\Enum\MaturityRating $maturityRating
 
 ***
 
+### liveCoverageState
+
+Live coverage state for articles that contain a live_container.
+
+```php
+private ?\TomGould\AppleNews\Enum\LiveCoverageState $liveCoverageState
+```
+
+***
+
 ### targetTerritoryCountryCodes
 
 ISO 3166-1 alpha-2 country codes for content targeting.
@@ -199,6 +209,30 @@ audience for your content.
 | Parameter         | Type                                        | Description         |
 |-------------------|---------------------------------------------|---------------------|
 | `$maturityRating` | **\TomGould\AppleNews\Enum\MaturityRating** | The content rating. |
+
+***
+
+### setLiveCoverageState
+
+Set the live coverage state.
+
+```php
+public setLiveCoverageState(\TomGould\AppleNews\Enum\LiveCoverageState $state): $this
+```
+
+Use this with articles that contain a LiveContainer. LIVE is required
+for the LIVE badge to display. Apple only accepts the transitions
+NONE -> LIVE -> COMPLETED and rejects anything else. On Update Article
+requests the client adds the required revision alongside this value.
+
+Live Coverage is an invitation-only feature: Apple rejects live content
+from channels that have not been approved for it.
+
+**Parameters:**
+
+| Parameter | Type                                           | Description              |
+|-----------|------------------------------------------------|--------------------------|
+| `$state`  | **\TomGould\AppleNews\Enum\LiveCoverageState** | The live coverage state. |
 
 ***
 
