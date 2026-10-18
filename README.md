@@ -499,7 +499,7 @@ composer docsmd
 
 Open `docs/html/index.html` in your browser, or browse the Markdown docs in `docs/markdown/`.
 
-Or visit the online docs: [Apple News API PHPDoc Documentation](https://www.dealmobile.co.uk/docs/html/)
+Or visit the online docs: [Apple News API PHPDoc Documentation](https://applenews.dealmobile.co.uk/)
 
 ---
 
