@@ -8,6 +8,13 @@ A modern, PSR-compliant PHP library for the Apple News Publisher API with full A
 [![PHP Version](https://img.shields.io/packagist/php-v/tomgould/apple-news-api.svg?style=flat-square)](https://php.net)
 [![License](https://img.shields.io/packagist/l/tomgould/apple-news-api.svg?style=flat-square)](LICENSE)
 
+## Documentation
+
+- [API reference](https://applenews.dealmobile.co.uk/): every class and method, generated from the code.
+- [Quick reference](docs/CHEATSHEET.md): client setup, components, styles and layouts on one page.
+- [Cookbook](docs/COOKBOOK.md): complete article examples and recipes for layouts, styling, dark mode and animation.
+- [Troubleshooting](docs/TROUBLESHOOTING.md): authentication, validation, asset and rate-limit errors, and how to debug them.
+
 ## Features
 
 - **Modern PHP 8.1+** with strict types and named arguments
@@ -499,7 +506,7 @@ composer docsmd
 
 Open `docs/html/index.html` in your browser, or browse the Markdown docs in `docs/markdown/`.
 
-Or visit the online docs: [Apple News API PHPDoc Documentation](https://applenews.dealmobile.co.uk/)
+The same reference is online at [applenews.dealmobile.co.uk](https://applenews.dealmobile.co.uk/).
 
 ---
 
@@ -531,5 +538,6 @@ This library is open-sourced software licensed under the [MIT license](LICENSE).
 
 - [Apple News Format Documentation](https://developer.apple.com/documentation/applenewsformat)
 - [Apple News API Documentation](https://developer.apple.com/documentation/applenewsapi)
+- [API reference for this library](https://applenews.dealmobile.co.uk/)
 - [Packagist Package](https://packagist.org/packages/tomgould/apple-news-api)
 - [GitHub Repository](https://github.com/tomgould/apple-news-api)
