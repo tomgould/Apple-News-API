@@ -506,7 +506,7 @@ composer docsmd
 
 Open `docs/html/index.html` in your browser, or browse the Markdown docs in `docs/markdown/`.
 
-The same reference is online at [applenews.dealmobile.co.uk](https://applenews.dealmobile.co.uk/).
+The same reference is online at [applenews.dealmobile.co.uk](https://applenews.dealmobile.co.uk/). The maintainer publishes it with `tools/deploy-docs.sh`, which regenerates the HTML and adds Cloudflare Web Analytics to the online copy only. The analytics count visits; according to Cloudflare they use no cookies or local storage, do not fingerprint visitors and do not identify anyone.
 
 ---
 
