@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace TomGould\AppleNews\Document\Components;
 
+use InvalidArgumentException;
 use JsonSerializable;
+use TomGould\AppleNews\Document\Additions\ComponentLink;
 use TomGould\AppleNews\Document\Animations\AnimationInterface;
 use TomGould\AppleNews\Document\Behaviors\BehaviorInterface;
 
@@ -41,6 +43,9 @@ abstract class Component implements JsonSerializable
 
     /** @var array<string, mixed>|null Conditional properties based on orientation/device. */
     protected ?array $conditional = null;
+
+    /** @var array<int, mixed>|null Additions (links) for the component, serialized. */
+    protected ?array $additions = null;
 
     /**
      * Get the role name for the component (e.g., 'body', 'photo', 'heading1').
@@ -208,6 +213,67 @@ abstract class Component implements JsonSerializable
     }
 
     /**
+     * Set the additions for the component.
+     *
+     * A ComponentLink makes the whole component tappable:
+     * ```php
+     * $photo->setAdditions([ComponentLink::to('https://apple.news/A5vHgPPmQSvuIxPjeXLTdGQ')]);
+     * ```
+     *
+     * Apple News Format allows `additions` only on some components: Photo,
+     * Image, Figure, Portrait, Logo, ArticleThumbnail, ArticleLink,
+     * ReplicaAdvertisement and the containers (Container, Aside, Chapter,
+     * Header, Section). Those take ComponentLink objects only. Text
+     * components take link ranges instead (see TextComponent::setAdditions()).
+     *
+     * A ComponentLink URL must point inside Apple News (an apple.news link, or
+     * the canonicalURL of an article published in News); Apple News ignores
+     * links it cannot resolve.
+     *
+     * @param array<int, ComponentLink> $additions The component links.
+     *
+     * @return static
+     *
+     * @throws InvalidArgumentException If the component does not support
+     *   additions, or an addition is not a ComponentLink.
+     *
+     * @see https://developer.apple.com/documentation/applenewsformat/componentlink
+     */
+    public function setAdditions(array $additions): static
+    {
+        if (!$this->supportsComponentLink()) {
+            throw new InvalidArgumentException(
+                sprintf('%s does not support additions', static::class)
+            );
+        }
+
+        $serialized = [];
+        foreach ($additions as $addition) {
+            if (!$addition instanceof ComponentLink) {
+                throw new InvalidArgumentException(
+                    sprintf('%s only accepts ComponentLink additions', static::class)
+                );
+            }
+            $serialized[] = $addition->jsonSerialize();
+        }
+
+        $this->additions = $serialized;
+        return $this;
+    }
+
+    /**
+     * Whether Apple News Format allows a ComponentLink on this component.
+     *
+     * Components that take `additions` override this to return true.
+     *
+     * @return bool
+     */
+    protected function supportsComponentLink(): bool
+    {
+        return false;
+    }
+
+    /**
      * Get the base properties common to all components for JSON serialization.
      *
      * @return array<string, mixed>
@@ -246,6 +312,10 @@ abstract class Component implements JsonSerializable
 
         if ($this->conditional !== null) {
             $data['conditional'] = $this->conditional;
+        }
+
+        if ($this->additions !== null) {
+            $data['additions'] = $this->additions;
         }
 
         return $data;

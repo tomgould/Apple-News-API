@@ -391,6 +391,22 @@ $article->addComponent($articleTitle);
 - `inlineTextStyles` - Range-based styling
 - `additions` - Link ranges
 
+**Tappable components:** `Photo`, `Image`, `Figure`, `Portrait`, `Logo`,
+`ArticleThumbnail`, `ArticleLink`, `ReplicaAdvertisement` and the containers
+take a `ComponentLink`, which makes the whole component open a link:
+
+```php
+use TomGould\AppleNews\Document\Additions\ComponentLink;
+
+$photo = Photo::fromUrl('https://example.com/story.jpg')
+    ->setAdditions([ComponentLink::to('https://apple.news/A5vHgPPmQSvuIxPjeXLTdGQ')]);
+```
+
+The URL must point inside Apple News: an `apple.news` link, an anchor such as
+`#identifier`, or the canonical URL of an article published in News. Apple
+News ignores a link it cannot resolve. Other components throw
+`InvalidArgumentException`.
+
 ---
 
 ## Layouts & Containers

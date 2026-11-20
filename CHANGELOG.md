@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.1] - 2026-11-20
+
+### Added
+- `Component::setAdditions()` takes `ComponentLink` objects, making the whole component tappable, serialized as `additions`. Apple News Format allows it on `Photo`, `Image`, `Figure`, `Portrait`, `Logo`, `ArticleThumbnail`, `ArticleLink`, `ReplicaAdvertisement` and the containers (`Container`, `Aside`, `Chapter`, `Header`, `Section`). Other additions, or the call on any other non-text component, throw `InvalidArgumentException`
+
+### Changed
+- `TextComponent::setAdditions()` also takes `AdditionInterface` objects such as `LinkAddition`, stored serialized. Arrays are kept as given, and the JSON output is unchanged
+
 ## [2.2.0] - 2026-10-15
 
 ### Added

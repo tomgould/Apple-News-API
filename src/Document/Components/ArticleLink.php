@@ -58,5 +58,12 @@ final class ArticleLink extends Component
             ['articleIdentifier' => $this->articleIdentifier]
         );
     }
-}
 
+    /**
+     * {@inheritdoc}
+     */
+    protected function supportsComponentLink(): bool
+    {
+        return true;
+    }
+}

@@ -137,5 +137,12 @@ final class Figure extends Component
 
         return $data;
     }
-}
 
+    /**
+     * {@inheritdoc}
+     */
+    protected function supportsComponentLink(): bool
+    {
+        return true;
+    }
+}

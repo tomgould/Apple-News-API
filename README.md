@@ -23,7 +23,7 @@ A modern, PSR-compliant PHP library for the Apple News Publisher API with full A
 - **Complete ANF Coverage**: 45+ components, animations, behaviors, scenes, and conditional styles
 - **HMAC-SHA256 Authentication** handled automatically
 - **Zero Framework Dependencies**: use with any framework or standalone
-- **Thoroughly Tested**: 728 tests, 99.6% line coverage
+- **Thoroughly Tested**: 738 tests, 99.6% line coverage
 
 ## Requirements
 

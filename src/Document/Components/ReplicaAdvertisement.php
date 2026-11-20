@@ -34,5 +34,12 @@ final class ReplicaAdvertisement extends Component
             $this->getBaseProperties()
         );
     }
-}
 
+    /**
+     * {@inheritdoc}
+     */
+    protected function supportsComponentLink(): bool
+    {
+        return true;
+    }
+}

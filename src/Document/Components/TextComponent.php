@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace TomGould\AppleNews\Document\Components;
 
+use TomGould\AppleNews\Document\Additions\AdditionInterface;
+
 /**
  * Base class for all components that primarily contain text content.
  *
@@ -19,9 +21,6 @@ abstract class TextComponent extends Component
 
     /** @var string|null The text format (none, html, markdown). */
     protected ?string $format = null;
-
-    /** @var array<array<string, mixed>>|null Additions (links) applied to text ranges. */
-    protected ?array $additions = null;
 
     /**
      * @param string $text The raw text content.
@@ -79,14 +78,33 @@ abstract class TextComponent extends Component
      * Additions allow you to apply links to specific ranges of text.
      * Note: Additions are not supported when format is 'html' or 'markdown'.
      *
-     * @param array<array<string, mixed>> $additions Array of addition objects with rangeStart, rangeLength, and link.
+     * Each addition is an array (with type, URL, rangeStart and rangeLength)
+     * or an AdditionInterface object such as LinkAddition. Objects are stored
+     * serialized; arrays are kept as given.
+     *
+     * @param array<int, array<string, mixed>|AdditionInterface> $additions The additions.
      * @return static
      * @see https://developer.apple.com/documentation/applenewsformat/addition
      */
     public function setAdditions(array $additions): static
     {
-        $this->additions = $additions;
+        $this->additions = array_map(
+            static fn(mixed $addition): mixed => $addition instanceof AdditionInterface
+                ? $addition->jsonSerialize()
+                : $addition,
+            $additions
+        );
         return $this;
+    }
+
+    /**
+     * Text components take link ranges through their own setAdditions().
+     *
+     * @return bool
+     */
+    protected function supportsComponentLink(): bool
+    {
+        return true;
     }
 
     /**
@@ -95,6 +113,8 @@ abstract class TextComponent extends Component
     public function jsonSerialize(): array
     {
         $data = $this->getBaseProperties();
+        // Additions stay after the text properties, as before 2.2.1.
+        unset($data['additions']);
         $data['text'] = $this->text;
 
         if ($this->textStyle !== null) {

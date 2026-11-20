@@ -134,4 +134,12 @@ final class ArticleThumbnail extends Component
 
         return $data;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function supportsComponentLink(): bool
+    {
+        return true;
+    }
 }
