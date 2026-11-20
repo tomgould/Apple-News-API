@@ -137,6 +137,15 @@ new MediumRectangleAdvertisement();
 new ReplicaAdvertisement();           // Print replica ad
 ```
 
+Make a whole component tappable (Photo, Image, Figure, Portrait, Logo,
+ArticleThumbnail, ArticleLink, ReplicaAdvertisement and containers). The URL
+must point inside Apple News: an apple.news link, an anchor or the canonical
+URL of an article published in News.
+
+```php
+$photo->setAdditions([ComponentLink::to('https://apple.news/A5vHgPPmQSvuIxPjeXLTdGQ')]);
+```
+
 ---
 
 ## Text Styles

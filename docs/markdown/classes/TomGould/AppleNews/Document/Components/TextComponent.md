@@ -37,14 +37,6 @@ protected string|null $format
 
 ***
 
-### additions
-
-```php
-protected array<string,mixed>[]|null $additions
-```
-
-***
-
 ### text
 
 ```php
@@ -136,21 +128,35 @@ public setFormat(string $format): static
 Set additions (link ranges) for the text component.
 
 ```php
-public setAdditions(array<string,mixed>[] $additions): static
+public setAdditions(array<int,array<string,mixed>|\TomGould\AppleNews\Document\Additions\AdditionInterface> $additions): static
 ```
 
 Additions allow you to apply links to specific ranges of text.
 Note: Additions are not supported when format is 'html' or 'markdown'.
 
+Each addition is an array (with type, URL, rangeStart and rangeLength)
+or an AdditionInterface object such as LinkAddition. Objects are stored
+serialized; arrays are kept as given.
+
 **Parameters:**
 
-| Parameter    | Type                      | Description                                                       |
-|--------------|---------------------------|-------------------------------------------------------------------|
-| `$additions` | **array<string,mixed>[]** | Array of addition objects with rangeStart, rangeLength, and link. |
+| Parameter    | Type                                                                                         | Description    |
+|--------------|----------------------------------------------------------------------------------------------|----------------|
+| `$additions` | **array<int,array<string,mixed>\|\TomGould\AppleNews\Document\Additions\AdditionInterface>** | The additions. |
 
 **See Also:**
 
 * https://developer.apple.com/documentation/applenewsformat/addition
+
+***
+
+### supportsComponentLink
+
+Text components take link ranges through their own setAdditions().
+
+```php
+protected supportsComponentLink(): bool
+```
 
 ***
 
@@ -372,6 +378,59 @@ public setConditional(array<string,mixed> $conditional): static
 **See Also:**
 
 * https://developer.apple.com/documentation/applenewsformat/condition
+
+***
+
+### setAdditions
+
+Set the additions for the component.
+
+```php
+public setAdditions(array<int,\TomGould\AppleNews\Document\Additions\ComponentLink> $additions): static
+```
+
+A ComponentLink makes the whole component tappable:
+```php
+$photo->setAdditions([ComponentLink::to('https://apple.news/A5vHgPPmQSvuIxPjeXLTdGQ')]);
+```
+
+Apple News Format allows `additions` only on some components: Photo,
+Image, Figure, Portrait, Logo, ArticleThumbnail, ArticleLink,
+ReplicaAdvertisement and the containers (Container, Aside, Chapter,
+Header, Section). Those take ComponentLink objects only. Text
+components take link ranges instead (see TextComponent::setAdditions()).
+
+A ComponentLink URL must point inside Apple News (an apple.news link, or
+the canonicalURL of an article published in News); Apple News ignores
+links it cannot resolve.
+
+**Parameters:**
+
+| Parameter    | Type                                                                | Description          |
+|--------------|---------------------------------------------------------------------|----------------------|
+| `$additions` | **array<int,\TomGould\AppleNews\Document\Additions\ComponentLink>** | The component links. |
+
+**Throws:**
+
+If the component does not support
+additions, or an addition is not a ComponentLink.
+- [`InvalidArgumentException`](./)
+
+**See Also:**
+
+* https://developer.apple.com/documentation/applenewsformat/componentlink
+
+***
+
+### supportsComponentLink
+
+Whether Apple News Format allows a ComponentLink on this component.
+
+```php
+protected supportsComponentLink(): bool
+```
+
+Components that take `additions` override this to return true.
 
 ***
 

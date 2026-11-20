@@ -260,6 +260,43 @@ public setConditional(array<string,mixed> $conditional): static
 
 ***
 
+### setAdditions
+
+Set additions (link ranges) for the text component.
+
+```php
+public setAdditions(array<int,array<string,mixed>|\TomGould\AppleNews\Document\Additions\AdditionInterface> $additions): static
+```
+
+Additions allow you to apply links to specific ranges of text.
+Note: Additions are not supported when format is 'html' or 'markdown'.
+
+Each addition is an array (with type, URL, rangeStart and rangeLength)
+or an AdditionInterface object such as LinkAddition. Objects are stored
+serialized; arrays are kept as given.
+
+**Parameters:**
+
+| Parameter    | Type                                                                                         | Description    |
+|--------------|----------------------------------------------------------------------------------------------|----------------|
+| `$additions` | **array<int,array<string,mixed>\|\TomGould\AppleNews\Document\Additions\AdditionInterface>** | The additions. |
+
+**See Also:**
+
+* https://developer.apple.com/documentation/applenewsformat/addition
+
+***
+
+### supportsComponentLink
+
+Text components take link ranges through their own setAdditions().
+
+```php
+protected supportsComponentLink(): bool
+```
+
+***
+
 ### getBaseProperties
 
 Get the base properties common to all components for JSON serialization.
@@ -353,28 +390,5 @@ public setFormat(string $format): static
 | Parameter | Type       | Description |
 |-----------|------------|-------------|
 | `$format` | **string** |             |
-
-***
-
-### setAdditions
-
-Set additions (link ranges) for the text component.
-
-```php
-public setAdditions(array<string,mixed>[] $additions): static
-```
-
-Additions allow you to apply links to specific ranges of text.
-Note: Additions are not supported when format is 'html' or 'markdown'.
-
-**Parameters:**
-
-| Parameter    | Type                      | Description                                                       |
-|--------------|---------------------------|-------------------------------------------------------------------|
-| `$additions` | **array<string,mixed>[]** | Array of addition objects with rangeStart, rangeLength, and link. |
-
-**See Also:**
-
-* https://developer.apple.com/documentation/applenewsformat/addition
 
 ***

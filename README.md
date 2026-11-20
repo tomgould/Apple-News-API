@@ -289,6 +289,17 @@ An empty identifier, a non-`LivePost` child in a `LiveContainer`, or a `LivePost
 | `MediumRectangleAdvertisement` | Medium rectangle ad |
 | `ReplicaAdvertisement` | Print replica ad |
 
+To make a whole component tappable, give it a `ComponentLink`. Photos, images,
+figures, portraits, logos, article thumbnails and links, replica ads and
+containers accept one; the URL must point inside Apple News (an `apple.news`
+link, an anchor, or the canonical URL of an article published in News):
+
+```php
+use TomGould\AppleNews\Document\Additions\ComponentLink;
+
+$photo->setAdditions([ComponentLink::to('https://apple.news/A5vHgPPmQSvuIxPjeXLTdGQ')]);
+```
+
 ### Animations, Behaviors & Scenes
 
 #### Animations

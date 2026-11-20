@@ -321,6 +321,59 @@ public setConditional(array<string,mixed> $conditional): static
 
 ***
 
+### setAdditions
+
+Set the additions for the component.
+
+```php
+public setAdditions(array<int,\TomGould\AppleNews\Document\Additions\ComponentLink> $additions): static
+```
+
+A ComponentLink makes the whole component tappable:
+```php
+$photo->setAdditions([ComponentLink::to('https://apple.news/A5vHgPPmQSvuIxPjeXLTdGQ')]);
+```
+
+Apple News Format allows `additions` only on some components: Photo,
+Image, Figure, Portrait, Logo, ArticleThumbnail, ArticleLink,
+ReplicaAdvertisement and the containers (Container, Aside, Chapter,
+Header, Section). Those take ComponentLink objects only. Text
+components take link ranges instead (see TextComponent::setAdditions()).
+
+A ComponentLink URL must point inside Apple News (an apple.news link, or
+the canonicalURL of an article published in News); Apple News ignores
+links it cannot resolve.
+
+**Parameters:**
+
+| Parameter    | Type                                                                | Description          |
+|--------------|---------------------------------------------------------------------|----------------------|
+| `$additions` | **array<int,\TomGould\AppleNews\Document\Additions\ComponentLink>** | The component links. |
+
+**Throws:**
+
+If the component does not support
+additions, or an addition is not a ComponentLink.
+- [`InvalidArgumentException`](./)
+
+**See Also:**
+
+* https://developer.apple.com/documentation/applenewsformat/componentlink
+
+***
+
+### supportsComponentLink
+
+Whether Apple News Format allows a ComponentLink on this component.
+
+```php
+protected supportsComponentLink(): bool
+```
+
+Components that take `additions` override this to return true.
+
+***
+
 ### getBaseProperties
 
 Get the base properties common to all components for JSON serialization.
