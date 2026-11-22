@@ -1,0 +1,550 @@
+# Apple News API PHP Client
+
+I wrote this library so a PHP publishing system never needs hand-written Apple News JSON. You build each article from PHP objects; the library turns it into Apple News Format (ANF) and sends it to the Apple News Publisher API. It has been downloaded nearly 2,500 times from Packagist (2,493 on 22 November 2026).
+
+[![Latest Version](https://img.shields.io/packagist/v/tomgould/apple-news-api.svg?style=flat-square)](https://packagist.org/packages/tomgould/apple-news-api)
+[![Total Downloads](https://img.shields.io/packagist/dt/tomgould/apple-news-api.svg?style=flat-square)](https://packagist.org/packages/tomgould/apple-news-api)
+[![CI](https://github.com/tomgould/apple-news-api/actions/workflows/ci.yml/badge.svg)](https://github.com/tomgould/apple-news-api/actions)
+[![PHP Version](https://img.shields.io/packagist/php-v/tomgould/apple-news-api.svg?style=flat-square)](https://php.net)
+[![License](https://img.shields.io/packagist/l/tomgould/apple-news-api.svg?style=flat-square)](LICENSE)
+
+## Documentation
+
+- [API reference](https://applenews.dealmobile.co.uk/): every class and method, generated from the code.
+- [Quick reference](docs/CHEATSHEET.md): client setup, components, styles and layouts on one page.
+- [Cookbook](docs/COOKBOOK.md): complete article examples and recipes for layouts, styling, dark mode and animation.
+- [Troubleshooting](docs/TROUBLESHOOTING.md): authentication, validation, asset and rate-limit errors, and how to debug them.
+
+## What it covers
+
+Documents are built from more than 45 component types, along with the animations, behaviours, scenes and conditional styles that Apple News Format defines. The client covers the channel, section and article calls and signs every request with HMAC-SHA256 for you. I kept the dependencies to PHP 8.1 and the PSR HTTP interfaces, which means it sends requests through any PSR-18 client (Guzzle, Symfony HttpClient and others) and fits into any framework, or none.
+
+## Requirements
+
+- PHP 8.1 or higher
+- A PSR-18 HTTP client (e.g., Guzzle)
+- Apple News Publisher API credentials
+
+## Installation
+
+```bash
+composer require tomgould/apple-news-api
+```
+
+You also need a PSR-18 HTTP client and PSR-17 factories. Guzzle is recommended:
+
+```bash
+composer require guzzlehttp/guzzle guzzlehttp/psr7
+```
+
+## Quick Start
+
+```php
+use TomGould\AppleNews\Client\AppleNewsClient;
+use TomGould\AppleNews\Document\Article;
+use TomGould\AppleNews\Document\Components\{Title, Body, Photo};
+use TomGould\AppleNews\Document\Metadata;
+use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\HttpFactory;
+
+// 1. Create the client
+$factory = new HttpFactory();
+$client = AppleNewsClient::create(
+    keyId: 'your-api-key-id',
+    keySecret: 'your-api-secret',
+    httpClient: new Client(),
+    requestFactory: $factory,
+    streamFactory: $factory
+);
+
+// 2. Build an article
+$article = Article::create(
+    identifier: 'my-article-123',
+    title: 'Breaking News Story',
+    language: 'en'
+);
+
+$article
+    ->addComponent(new Title('Breaking News Story'))
+    ->addComponent(Photo::fromUrl('https://example.com/hero.jpg'))
+    ->addComponent(new Body('This is the article content...'));
+
+$article->setMetadata(
+    (new Metadata())
+        ->addAuthor('Jane Doe')
+        ->setExcerpt('A short summary of the article')
+);
+
+// 3. Publish to Apple News
+$response = $client->createArticle('your-channel-id', $article);
+
+echo "Published! Article ID: " . $response['data']['id'];
+```
+
+---
+
+## Using the library
+
+### Getting Your API Credentials
+
+1. Sign up for [Apple News Publisher](https://developer.apple.com/apple-news/)
+2. Create a channel for your publication
+3. Generate API credentials (Key ID and Secret)
+
+### Client Initialization
+
+```php
+use TomGould\AppleNews\Client\AppleNewsClient;
+use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\HttpFactory;
+
+$factory = new HttpFactory();
+$httpClient = new Client();
+
+$client = AppleNewsClient::create(
+    keyId: 'your-key-id',
+    keySecret: 'your-base64-secret',
+    httpClient: $httpClient,
+    requestFactory: $factory,
+    streamFactory: $factory
+);
+```
+
+### Building Articles
+
+#### Create the Article
+
+```php
+use TomGould\AppleNews\Document\Article;
+
+$article = Article::create(
+    identifier: 'my-internal-id-123',
+    title: 'The Future of Web Development',
+    language: 'en',
+    columns: 7,
+    width: 1024
+);
+```
+
+#### Add Metadata
+
+```php
+use TomGould\AppleNews\Document\Metadata;
+
+$metadata = (new Metadata())
+    ->addAuthor('Jane Doe')
+    ->setExcerpt('An in-depth look at modern web frameworks.')
+    ->addKeywords(['PHP', 'Web', 'Programming'])
+    ->setDatePublished(new DateTime())
+    ->setContentGenerationType('none'); // AI disclosure
+
+$article->setMetadata($metadata);
+```
+
+#### Define Reusable Styles
+
+```php
+use TomGould\AppleNews\Document\Styles\ComponentTextStyle;
+
+$bodyStyle = (new ComponentTextStyle())
+    ->setFontName('Helvetica')
+    ->setFontSize(18)
+    ->setLineHeight(24)
+    ->setTextColor('#333333');
+
+$article->addComponentTextStyle('defaultBody', $bodyStyle);
+```
+
+#### Add Components
+
+```php
+use TomGould\AppleNews\Document\Components\{Title, Body, Photo, Heading, Divider};
+
+$article
+    ->addComponent(new Title('The Future of Web Development'))
+    ->addComponent(new Divider())
+    ->addComponent(new Heading('Introduction', level: 2))
+    ->addComponent(
+        (new Body('This is the <strong>main</strong> paragraph.'))
+            ->setFormat('html')
+            ->setTextStyle('defaultBody')
+    );
+```
+
+### Available Components
+
+#### Text Components
+
+| Component | Description |
+|-----------|-------------|
+| `Title` | Article title |
+| `Heading` | Section headings (levels 1-6) |
+| `Body` | Paragraph text |
+| `Intro` | Introduction/lead paragraph |
+| `Caption` | Image/video captions |
+| `Pullquote` | Highlighted quotes |
+| `Quote` | Block quotes |
+| `Byline` | Author byline |
+| `Author` | Author name |
+| `Illustrator` | Illustrator credit |
+| `Photographer` | Photographer credit |
+
+#### Media Components
+
+| Component | Description |
+|-----------|-------------|
+| `Photo` | Single image |
+| `Figure` | Image with caption |
+| `Portrait` | Portrait-oriented image |
+| `Logo` | Publication logo |
+| `Gallery` | Image gallery |
+| `Mosaic` | Mosaic image layout |
+| `Video` | Native video |
+| `Audio` | Audio player |
+| `Music` | Apple Music integration |
+| `Podcast` | Podcast embed |
+| `ARKit` | AR Quick Look experiences |
+
+#### Social Embeds
+
+| Component | Description |
+|-----------|-------------|
+| `Tweet` | Twitter/X embeds |
+| `Instagram` | Instagram embeds |
+| `FacebookPost` | Facebook embeds |
+| `TikTok` | TikTok embeds |
+| `EmbedWebVideo` | YouTube/Vimeo embeds |
+
+#### Structure Components
+
+| Component | Description |
+|-----------|-------------|
+| `Container` | Group components together |
+| `Section` | Article section |
+| `Chapter` | Chapter division |
+| `Header` | Section header |
+| `Footer` | Section footer |
+| `Aside` | Sidebar content |
+| `Divider` | Visual separator |
+| `FlexibleSpacer` | Flexible spacing in horizontal stacks |
+
+#### Live Coverage
+
+Apple must enable Live Coverage for your channel before it accepts articles with live content.
+
+| Component | Description |
+|-----------|-------------|
+| `LiveContainer` | Holds the live posts (`live_container`). Only accepts `LivePost` children |
+| `LivePost` | One live update (`live_post`). Holds any components except `LivePost` and `LiveContainer` |
+
+```php
+use TomGould\AppleNews\Document\Components\{Body, LiveContainer, LivePost, Tweet};
+use TomGould\AppleNews\Enum\LiveCoverageState;
+use TomGould\AppleNews\Request\ArticleMetadata;
+
+// Both components require an identifier that is unique across the article.
+// Add the newest post first.
+$live = (new LiveContainer('live-coverage'))
+    ->addComponent(
+        (new LivePost('post-2'))
+            ->addComponent(new Body('Updated at 14:05'))
+            ->addComponent(new Tweet('https://twitter.com/example/status/1234567890'))
+    )
+    ->addComponent(
+        (new LivePost('post-1'))
+            ->addComponent(new Body('Updated at 13:50'))
+            ->addComponent(new Body('Coverage is about to start.'))
+    );
+
+$article->addComponent($live);
+
+// Mark the article as live coverage.
+$metadata = (new ArticleMetadata())->setLiveCoverageState(LiveCoverageState::LIVE);
+$client->createArticle($channelId, $article, $metadata->toArray());
+```
+
+An empty identifier, a non-`LivePost` child in a `LiveContainer`, or a `LivePost`/`LiveContainer` added directly to a `LivePost` throws `InvalidArgumentException`. Anything else about live articles is checked by Apple's API.
+
+#### Data Components
+
+| Component | Description |
+|-----------|-------------|
+| `DataTable` | Data-driven table |
+| `HTMLTable` | HTML-based table |
+| `Map` | Interactive map |
+| `Place` | Location marker |
+
+#### Interactive Components
+
+| Component | Description |
+|-----------|-------------|
+| `LinkButton` | Call-to-action buttons |
+| `BannerAdvertisement` | Banner ad placement |
+| `MediumRectangleAdvertisement` | Medium rectangle ad |
+| `ReplicaAdvertisement` | Print replica ad |
+
+To make a whole component tappable, give it a `ComponentLink`. Photos, images,
+figures, portraits, logos, article thumbnails and links, replica ads and
+containers accept one; the URL must point inside Apple News (an `apple.news`
+link, an anchor, or the canonical URL of an article published in News):
+
+```php
+use TomGould\AppleNews\Document\Additions\ComponentLink;
+
+$photo->setAdditions([ComponentLink::to('https://apple.news/A5vHgPPmQSvuIxPjeXLTdGQ')]);
+```
+
+### Animations, Behaviors & Scenes
+
+#### Animations
+
+```php
+use TomGould\AppleNews\Document\Animations\{
+    AppearAnimation,
+    FadeInAnimation,
+    MoveInAnimation,
+    ScaleFadeAnimation
+};
+
+// Fade in animation
+$component->setAnimation(FadeInAnimation::standard());
+
+// Move in from left
+$component->setAnimation(MoveInAnimation::fromLeft());
+
+// Scale and fade
+$component->setAnimation(ScaleFadeAnimation::subtle());
+```
+
+#### Behaviors
+
+```php
+use TomGould\AppleNews\Document\Behaviors\{
+    Parallax,
+    Springy,
+    BackgroundParallax
+};
+
+// Parallax scrolling effect
+$component->setBehavior(Parallax::withFactor(0.5));
+
+// Spring physics
+$component->setBehavior(Springy::create());
+
+// Background parallax
+$component->setBehavior(BackgroundParallax::withFactor(0.8));
+```
+
+#### Scenes (for Headers)
+
+```php
+use TomGould\AppleNews\Document\Scenes\{
+    FadingStickyHeader,
+    ParallaxScaleHeader
+};
+
+// Fading sticky header
+$header->setScene(FadingStickyHeader::create());
+
+// Parallax scale header
+$header->setScene(ParallaxScaleHeader::create());
+```
+
+### Responsive Design with Conditions
+
+```php
+use TomGould\AppleNews\Document\Layouts\Condition;
+use TomGould\AppleNews\Document\Styles\ComponentTextStyle;
+use TomGould\AppleNews\Document\Conditionals\{
+    ConditionalComponentStyle,
+    ConditionalTextStyle,
+    ConditionalComponentLayout
+};
+
+// Dark mode styling
+$darkStyle = ConditionalComponentStyle::darkMode('#1C1C1E');
+
+// Dark mode text color for a component text style
+$bodyStyle = (new ComponentTextStyle())
+    ->setTextColor('#222222')
+    ->addConditional(ConditionalTextStyle::darkMode('#FFFFFF'));
+
+// Compact width layout
+$compactLayout = ConditionalComponentLayout::fullWidthOnCompact();
+
+// Viewport-based conditions
+$condition = Condition::viewportWidth(375, 768);
+
+// Platform-specific
+$iosCondition = Condition::iOS();
+$macCondition = Condition::macOS();
+```
+
+### Fills and Backgrounds
+
+```php
+use TomGould\AppleNews\Document\Styles\Fills\{
+    ImageFill,
+    LinearGradientFill,
+    VideoFill
+};
+
+// Image background
+$fill = ImageFill::fromUrl('https://example.com/bg.jpg')->asCover();
+
+// Gradient background
+$gradient = LinearGradientFill::vertical('#000000', '#333333');
+
+// Video background
+$video = VideoFill::fromUrl('https://example.com/bg.mp4')->setLoop(true);
+```
+
+### Working with Assets
+
+#### Bundle Assets (Local Files)
+
+```php
+$article->addComponent(Photo::fromBundle('hero.jpg'));
+
+// Provide the file path when publishing
+$assets = [
+    'bundle://hero.jpg' => '/path/to/hero.jpg'
+];
+
+$client->createArticle($channelId, $article, null, $assets);
+```
+
+#### Remote Assets
+
+```php
+$article->addComponent(
+    Photo::fromUrl('https://example.com/image.jpg')
+);
+```
+
+### API Operations
+
+#### Channels
+
+```php
+$channel = $client->getChannel($channelId);
+$quota = $client->getChannelQuota($channelId);
+```
+
+#### Sections
+
+```php
+$sections = $client->listSections($channelId);
+$section = $client->getSection($sectionId);
+$client->promoteArticles($sectionId, ['article-id-1', 'article-id-2']);
+```
+
+#### Articles
+
+```php
+use TomGould\AppleNews\Request\ArticleMetadata;
+use TomGould\AppleNews\Enum\LiveCoverageState;
+use TomGould\AppleNews\Enum\MaturityRating;
+
+// Create with metadata
+$metadata = (new ArticleMetadata())
+    ->setIsSponsored(false)
+    ->setIsCandidateToBeFeatured(true)
+    ->setMaturityRating(MaturityRating::GENERAL)
+    ->addTargetTerritories(['US', 'GB', 'CA']);
+
+$response = $client->createArticle($channelId, $article, $metadata->toArray(), $assets);
+
+// Read
+$article = $client->getArticle($articleId);
+
+// Search
+$results = $client->searchArticlesInChannel($channelId, ['pageSize' => 20]);
+
+// Update (requires revision token)
+$client->updateArticle($articleId, $revision, $updatedArticle);
+
+// Live Coverage articles only: the client sends the revision alongside
+// liveCoverageState in the same metadata, e.g. to end the coverage
+$liveMetadata = (new ArticleMetadata())->setLiveCoverageState(LiveCoverageState::COMPLETED);
+$client->updateArticle($articleId, $revision, $liveArticle, $liveMetadata->toArray());
+
+// Delete
+$client->deleteArticle($articleId);
+```
+
+### Error Handling
+
+```php
+use TomGould\AppleNews\Exception\AppleNewsException;
+use TomGould\AppleNews\Exception\AuthenticationException;
+
+try {
+    $client->createArticle($channelId, $article);
+} catch (AuthenticationException $e) {
+    // Invalid API credentials (401/403)
+    echo "Auth failed: " . $e->getMessage();
+} catch (AppleNewsException $e) {
+    // Other API errors
+    echo "Error: " . $e->getMessage();
+    echo "Code: " . $e->getErrorCode();    // e.g., 'INVALID_DOCUMENT'
+    echo "Field: " . $e->getKeyPath();      // e.g., 'components[0].text'
+}
+```
+
+---
+
+## Generating Documentation
+
+Generate a local API reference:
+```bash
+# First-time setup
+mkdir -p tools
+composer docs:install
+
+# Generate HTML docs
+composer docs
+
+# Generate Markdown docs
+composer docsmd
+```
+
+Open `docs/html/index.html` in your browser, or browse the Markdown docs in `docs/markdown/`.
+
+The same reference is online at [applenews.dealmobile.co.uk](https://applenews.dealmobile.co.uk/). The maintainer publishes it with `tools/deploy-docs.sh`, which regenerates the HTML and adds Cloudflare Web Analytics to the online copy only. The analytics count visits; according to Cloudflare they use no cookies or local storage, do not fingerprint visitors and do not identify anyone.
+
+---
+
+## Testing
+
+The test suite runs in GitHub Actions on PHP 8.1, 8.2, 8.3 and 8.4 for every push to master and every pull request, along with static analysis by PHPStan.
+
+```bash
+# Run tests
+composer test
+
+# Run with coverage report
+composer test:coverage
+```
+
+---
+
+## Contributing
+
+Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
+
+---
+
+## License
+
+This library is open-sourced software licensed under the [MIT license](LICENSE).
+
+---
+
+## Links
+
+- [Apple News Format Documentation](https://developer.apple.com/documentation/applenewsformat)
+- [Apple News API Documentation](https://developer.apple.com/documentation/applenewsapi)
+- [API reference for this library](https://applenews.dealmobile.co.uk/)
+- [Packagist Package](https://packagist.org/packages/tomgould/apple-news-api)
+- [GitHub Repository](https://github.com/tomgould/apple-news-api)

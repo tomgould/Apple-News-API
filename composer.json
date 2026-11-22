@@ -1,0 +1,77 @@
+{
+    "name": "tomgould/apple-news-api",
+    "description": "PHP client for the Apple News Publisher API that builds Apple News Format documents from PHP objects",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "apple",
+        "news",
+        "api",
+        "publisher",
+        "apple-news",
+        "apple-news-format",
+        "anf",
+        "psr-18",
+        "psr-7"
+    ],
+    "authors": [
+        {
+            "name": "TomGould",
+            "email": "tom@dealmobile.co.uk",
+            "homepage": "https://dealmobile.co.uk/",
+            "role": "Developer"
+        }
+    ],
+    "homepage": "https://github.com/tomgould/apple-news-api",
+    "support": {
+        "issues": "https://github.com/tomgould/apple-news-api/issues",
+        "source": "https://github.com/tomgould/apple-news-api"
+    },
+    "require": {
+        "php": "^8.1",
+        "psr/http-client": "^1.0",
+        "psr/http-factory": "^1.0",
+        "psr/http-message": "^1.0|^2.0"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.0",
+        "guzzlehttp/guzzle": "^7.0",
+        "guzzlehttp/psr7": "^2.0",
+        "phpstan/phpstan": "^1.10",
+        "phpunit/phpunit": "^10.0|^11.0",
+        "saggre/phpdocumentor-markdown": "^1.0"
+    },
+    "suggest": {
+        "guzzlehttp/guzzle": "PSR-18 HTTP client implementation",
+        "symfony/http-client": "Alternative PSR-18 HTTP client"
+    },
+    "autoload": {
+        "psr-4": {
+            "TomGould\\AppleNews\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "TomGould\\AppleNews\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "test:coverage": "XDEBUG_MODE=coverage phpunit --coverage-html coverage",
+        "analyse": "phpstan analyse src --level=8",
+        "cs-fix": "php-cs-fixer fix src",
+        "docs:install": "curl -sSL https://phpdoc.org/phpDocumentor.phar -o tools/phpDocumentor.phar && chmod +x tools/phpDocumentor.phar",
+        "docs": "php tools/phpDocumentor.phar run -d src -t docs/html --title='Apple News API PHP Client'",
+        "docsmd": [
+            "rm -rf .phpdoc/",
+            "php tools/phpDocumentor.phar run -d src -t docs/markdown --template='vendor/saggre/phpdocumentor-markdown/themes/markdown' --title='Apple News API PHP Client'",
+            "php tools/fix-md-links.php docs/markdown"
+        ]
+
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
